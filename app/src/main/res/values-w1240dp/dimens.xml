@@ -1,0 +1,19 @@
+<resources>
+    <dimen name="fab_margin">200dp</dimen>
+
+    <!-- Font sizes -->
+    <dimen name="text_size_xs">8sp</dimen>
+    <dimen name="text_size_sm">12sp</dimen>
+    <dimen name="text_size_md">22sp</dimen>
+    <dimen name="text_size_lg">44sp</dimen>
+    <dimen name="text_size_xl">96sp</dimen>
+    <dimen name="text_size_xll">192sp</dimen>
+
+    <!-- spaces -->
+    <dimen name="space_xs">8dp</dimen>
+    <dimen name="space_sm">11dp</dimen>
+    <dimen name="space_md">11dp</dimen>
+    <dimen name="space_lg">44dp</dimen>
+    <dimen name="space_xl">96dp</dimen>
+    <dimen name="space_xxl">192dp</dimen>
+</resources>

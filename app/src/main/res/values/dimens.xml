@@ -1,0 +1,20 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Font sizes -->
+    <dimen name="text_size_xs">4sp</dimen>
+    <dimen name="text_size_sm">8sp</dimen>
+    <dimen name="text_size_md">16sp</dimen>
+    <dimen name="text_size_lg">32sp</dimen>
+    <dimen name="text_size_xl">64sp</dimen>
+    <dimen name="text_size_xll">128sp</dimen>
+
+    <!-- spaces -->
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_sm">8dp</dimen>
+    <dimen name="space_md">16dp</dimen>
+    <dimen name="space_lg">32dp</dimen>
+    <dimen name="space_xl">64dp</dimen>
+    <dimen name="space_xxl">128dp</dimen>
+
+</resources>
