@@ -21,7 +21,7 @@ git clone https://github.com/jomarierafa/WeatherApp.git
 3. Select the root folder of the project to import.
 
 ## Architecture Overview
-The project structure follows the MVVMM (Model-View-ViewModel) architectural pattern together with clean architecture. You can check GeekforGeeks ***[post](https://github.com/android/architecture-samples/tree/todo-mvp-kotlin)*** for reference.
+The project structure follows the MVVM (Model-View-ViewModel) architectural pattern together with clean architecture. You can check GeekforGeeks ***[post](https://www.geeksforgeeks.org/what-is-clean-architecture-in-android)*** for reference.
 
 ## Build Versioning
 The project follows the following pattern for build versioning:
@@ -39,3 +39,21 @@ The project follows the following pattern for build versioning:
 - [Truth](https://github.com/google/truth) -  testing library for Java and Kotlin that makes it easy to write assertions in tests by providing a fluent and readable API.
 - [MockK](https://mockk.io/) - mocking library for Kotlin that provides a simple and powerful API for creating and working with mock objects in tests.
 
+## API Endpoints
+The app connects to [OpenWeather API](https://openweathermap.org/api).
+
+*Use to get current weather details.*
+```bash
+https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}}
+``` 
+Params:
+   > **lat, lon** - geographical coordinates (latitude, longitude). <br>
+   > **appid** - your unique API key (you can always find it ***[here](https://home.openweathermap.org/api_keys)***).
+
+## Setup your OpenWeather API key to the project
+In order to ensure the security of your API key, it's important to keep it confidential and not expose it publicly. By storing your API key in a local.properties file, you are keeping it separate from your source code and thus preventing accidental exposure or theft of the key.
+
+1. In your Android Studio project, navigate to the root directory of your project.
+2. Create a new file called **local.properties** if it doesn't already exist.
+3. Open the **local.properties** file and add a new line with the following format: <br>
+**api_key=YOUR_API_KEY_HERE**, replacing **YOUR_API_KEY_HERE** with the API key you have.
