@@ -57,3 +57,5 @@ In order to ensure the security of your API key, it's important to keep it confi
 2. Create a new file called **local.properties** if it doesn't already exist.
 3. Open the **local.properties** file and add a new line with the following format: <br>
 **api_key=YOUR_API_KEY_HERE**, replacing **YOUR_API_KEY_HERE** with the API key you have.
+
+Note that you may need to clean and rebuild your project after adding the local.properties file to ensure that the key is properly added to your project's resources.
