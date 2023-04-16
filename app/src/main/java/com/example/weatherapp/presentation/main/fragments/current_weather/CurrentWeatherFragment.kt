@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
@@ -13,7 +11,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -31,10 +28,6 @@ class CurrentWeatherFragment : Fragment() {
 
     private val viewModel: CurrentWeatherViewModel by viewModels()
     private lateinit var binding: FragmentCurrentWeatherBinding
-
-    private val locationManager: LocationManager by lazy {
-        requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +53,7 @@ class CurrentWeatherFragment : Fragment() {
 
     private fun initViews(){
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getCurrentWeather(getCurrentLocation())
+            viewModel.getCurrentWeather()
         }
     }
 
@@ -88,6 +81,7 @@ class CurrentWeatherFragment : Fragment() {
     }
 
     private fun isGPSEnabled(): Boolean {
+        val locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
@@ -101,29 +95,13 @@ class CurrentWeatherFragment : Fragment() {
         }
     }
 
-
-    private val locationCallback = object : LocationListener {
-        override fun onLocationChanged(location: Location) {}
-        override fun onProviderEnabled(provider: String) {}
-        override fun onProviderDisabled(provider: String) {}
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-    }
-
     private fun startLocationUpdates() {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, 5000, 10f, locationCallback
-            )
-            viewModel.getCurrentWeather(getCurrentLocation())
+            viewModel.startLocationUpdate()
         }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getCurrentLocation(): Location? {
-        return locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
     }
 
     @SuppressLint("SetTextI18n")
@@ -138,11 +116,6 @@ class CurrentWeatherFragment : Fragment() {
         binding.locationText.text = "${weather.city}, ${weather.country.getCountryName()}"
         binding.sunriseText.text = "Sunrise ${weather.sunriseTime.convertUtcToLocaleTime()}"
         binding.sunsetText.text = "Sunset ${weather.sunsetTime.convertUtcToLocaleTime()}"
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        locationManager.removeUpdates(locationCallback)
     }
 
     companion object {
