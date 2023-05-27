@@ -29,12 +29,12 @@ The project follows the following pattern for build versioning:
     majorVersion.releaseVersion.patchNumber (e.g: 1.3.12)
 
 ## Library Used
+- [Jetpack Compose](https://developer.android.com/jetpack/compose) - Android’s recommended modern toolkit for building native UI.
 - [Room](https://developer.android.com/jetpack/androidx/releases/room) - provides an abstraction layer over SQLite for easier database management.
 - [Coil](https://github.com/coil-kt/coil) - image loading library that makes it easy to load images from various sources, such as network, local storage, or even a remote server.
 - [Retrofit](https://square.github.io/retrofit/) - simplifies the process of making HTTP network requests.
 - [Kotlin Coroutines](https://developer.android.com/kotlin/coroutines) - library for Kotlin programming language that provides a way to write asynchronous, non-blocking code that is both easy to read and easy to write.
 - [Dagger Hilt](https://developer.android.com/training/dependency-injection/hilt-android) - dependency injection library for Android that is built on top of ***[Google's Dagger 2 library](https://developer.android.com/training/dependency-injection/dagger-android)***.
-- [EasyPermissions-ktx](https://github.com/VMadalin/easypermissions-ktx) - Kotlin version of the popular ***[googlesample/easypermissions](https://github.com/googlesamples/easypermissions)*** wrapper library to simplify basic system permissions logic on Android M or higher.
 - [DataStore](https://github.com/VMadalin/easypermissions-ktx) - data storage solution that allows you to store key-value pairs or typed objects with protocol buffers.
 - [Truth](https://github.com/google/truth) -  testing library for Java and Kotlin that makes it easy to write assertions in tests by providing a fluent and readable API.
 - [MockK](https://mockk.io/) - mocking library for Kotlin that provides a simple and powerful API for creating and working with mock objects in tests.

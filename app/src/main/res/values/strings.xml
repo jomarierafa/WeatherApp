@@ -32,4 +32,5 @@
     <string name="your_gps_seems_to_be_disabled">Your GPS seems to be disabled, please enable it.</string>
     <string name="location_permission_required">Location permission is Required to use this app</string>
     <string name="successfully_registered">Successfully Registered</string>
+    <string name="cancel">Cancel</string>
 </resources>

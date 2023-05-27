@@ -1,11 +1,14 @@
-package com.example.weatherapp.presentation.main.fragments.current_weather
+package com.example.weatherapp.presentation.main.current_weather
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.LOCATION_SERVICE
+import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.common.Resource
@@ -22,11 +25,27 @@ class CurrentWeatherViewModel @Inject constructor(
 ): ViewModel() {
 
     private val locationManager: LocationManager by lazy {
-        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        context.getSystemService(LOCATION_SERVICE) as LocationManager
     }
 
     private val _state = MutableStateFlow(CurrentWeatherState())
-    val state: StateFlow<CurrentWeatherState> = _state.asStateFlow()
+    val state = _state.asStateFlow()
+
+    private val locationCallback = object : LocationListener {
+        override fun onLocationChanged(location: Location) {}
+        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {}
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+    }
+
+    init {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED) {
+            startLocationUpdate()
+        }
+    }
 
     @SuppressLint("MissingPermission")
     fun startLocationUpdate() {
@@ -41,11 +60,13 @@ class CurrentWeatherViewModel @Inject constructor(
         return locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
     }
 
-    private val locationCallback = object : LocationListener {
-        override fun onLocationChanged(location: Location) {}
-        override fun onProviderEnabled(provider: String) {}
-        override fun onProviderDisabled(provider: String) {}
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+    fun onEvent(event: CurrentWeatherEvent) {
+        when(event) {
+            CurrentWeatherEvent.SwipeRefresh -> {
+                getCurrentWeather()
+            }
+        }
+
     }
 
     fun getCurrentWeather() {
@@ -61,7 +82,7 @@ class CurrentWeatherViewModel @Inject constructor(
                     )
                 }
                 is Resource.Loading -> {
-                    _state.value = CurrentWeatherState(isLoading = true)
+                    _state.value = _state.value.copy(isLoading = true)
                 }
 
             }

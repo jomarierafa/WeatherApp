@@ -1,10 +1,14 @@
 package com.example.weatherapp.common
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import java.nio.charset.Charset
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
@@ -81,4 +85,23 @@ fun buildAlertDialog(context: Context, message: String, buttonText: String, onPo
         }
     val alert = builder.create()
     alert.show()
+}
+
+fun Activity.openAppSettings() {
+    Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", packageName, null)
+    ).also(::startActivity)
+}
+
+fun isAllPermissionGranted(
+    context: Context,
+    permissions: Array<String>
+): Boolean {
+    return permissions.all {
+        ContextCompat.checkSelfPermission(
+            context,
+            it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 }

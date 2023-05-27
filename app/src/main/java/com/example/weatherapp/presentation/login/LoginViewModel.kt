@@ -1,5 +1,10 @@
 package com.example.weatherapp.presentation.login
 
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapp.data.local.InvalidUserException
@@ -15,13 +20,44 @@ class LoginViewModel @Inject constructor(
     private val userUseCases: UserUseCases
 ): ViewModel() {
 
+    var state by mutableStateOf(LoginState())
+
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    fun login(username: String, password: String) {
+    fun onEvent(event: LoginEvent) {
+        when(event) {
+            is LoginEvent.Login -> {
+               login()
+            }
+            is LoginEvent.UsernameChanged -> {
+                state = state.copy(username = event.value)
+            }
+            is LoginEvent.OnPermissionResult -> {
+                if(!event.isGranted && !state.visiblePermissionDialogQueue.contains(event.permission)) {
+                    val updatedQueue = state.visiblePermissionDialogQueue.toMutableList()
+                    updatedQueue.add(event.permission)
+                    state = state.copy(visiblePermissionDialogQueue = updatedQueue)
+                }
+            }
+            is LoginEvent.DismissDialog -> {
+                if(state.visiblePermissionDialogQueue.isNotEmpty()) {
+                    val updatedQueue = state.visiblePermissionDialogQueue.toMutableList()
+                    updatedQueue.clear()
+                    state = state.copy(visiblePermissionDialogQueue = updatedQueue)
+                }
+            }
+            is LoginEvent.PasswordChanged -> {
+                state = state.copy(password = event.value)
+            }
+        }
+    }
+
+
+    fun login() {
         viewModelScope.launch {
             try {
-                userUseCases.getUser(username, password)
+                userUseCases.getUser(state.username, state.password)
                 _eventFlow.emit(UiEvent.SuccessfullyLogin)
             } catch (e: InvalidUserException) {
                 _eventFlow.emit(
@@ -32,7 +68,6 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
-
 
 
     sealed class UiEvent {
