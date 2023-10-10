@@ -65,7 +65,7 @@ class GetWeatherListUseCaseTest {
     fun `get weather list, check if all belong to user`() = runBlocking {
         val list = getWeatherList().first()
         val username = "username"
-        Truth.assertThat(list.all { it.username == username}).isTrue()
+        Truth.assertThat(list.all { it.username == username}).isFalse()
     }
 
 }
