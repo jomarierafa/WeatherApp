@@ -37,6 +37,8 @@ jobs:
           cache: gradle
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Set up environment variables
+        run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
       - name: Run Unit Tests
         run: ./gradlew test -Papi.key="${API_KEY}"
 
