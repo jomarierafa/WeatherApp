@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import kotlin.math.log
 
 class GetWeatherListUseCaseTest {
 
