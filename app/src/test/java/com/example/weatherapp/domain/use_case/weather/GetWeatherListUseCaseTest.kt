@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import kotlin.math.log
 
 class GetWeatherListUseCaseTest {
 
@@ -65,7 +64,7 @@ class GetWeatherListUseCaseTest {
     fun `get weather list, check if all belong to user`() = runBlocking {
         val list = getWeatherList().first()
         val username = "username"
-        Truth.assertThat(list.all { it.username == username}).isFalse()
+        Truth.assertThat(list.all { it.username == username}).isTrue()
     }
 
 }
