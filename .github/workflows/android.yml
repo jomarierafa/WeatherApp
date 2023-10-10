@@ -29,9 +29,6 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build -Papi.key="${API_KEY}"
 
-    - name: Run Unit Tests
-      run: ./gradlew test
-
   test:
     runs-on: ubuntu-latest
     needs: build
