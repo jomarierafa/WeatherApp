@@ -25,7 +25,7 @@ jobs:
     - name: Create Firebase Config JSON
       run: echo "$FIREBASE_CONFIG" > app/google-services.json
     - name: Build with Gradle
-      run: ./gradlew build -Papi.key="${API_KEY}" -x test
+      run: ./gradlew build -x test
 
   test:
     needs: build
@@ -46,7 +46,7 @@ jobs:
       - name: Create Firebase Config JSON
         run: echo "$FIREBASE_CONFIG" > app/google-services.json
       - name: Run Unit Tests
-        run: ./gradlew test -Papi.key="${API_KEY}"
+        run: ./gradlew test
 
   deploy:
     needs: test
@@ -70,5 +70,5 @@ jobs:
       - name: Create Firebase Service Account JSON
         run: echo "$FIREBASE_SERVICE_CREDENTIALS" > firebase-service-account.json
       - name: Build and Deploy
-        run: ./gradlew assembleDebug appDistributionUploadDebug -Papi.key="${API_KEY}"
+        run: ./gradlew assembleDebug appDistributionUploadDebug
 
