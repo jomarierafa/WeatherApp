@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+      API_KEY: ${{ secrets.API_KEY }}
     steps:
     - uses: actions/checkout@v3
     - name: set up JDK 17
@@ -22,7 +23,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Set up environment variables
-      run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+      run: echo "$API_KEY" >> $GITHUB_ENV
     - name: Create Firebase Config JSON
       run: echo "$FIREBASE_CONFIG" > app/google-services.json
     - name: Build with Gradle
@@ -31,6 +32,9 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    env:
+      FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+      API_KEY: ${{ secrets.API_KEY }}
     steps:
       - uses: actions/checkout@v3
       - name: set up JDK 17
@@ -42,7 +46,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Set up environment variables
-        run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+        run: echo "$API_KEY" >> $GITHUB_ENV
+      - name: Create Firebase Config JSON
+        run: echo "$FIREBASE_CONFIG" > app/google-services.json
       - name: Run Unit Tests
         run: ./gradlew test -Papi.key="${API_KEY}"
 
@@ -52,6 +58,7 @@ jobs:
     env:
       FIREBASE_SERVICE_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_CREDENTIALS }}
       FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+      API_KEY: ${{ secrets.API_KEY }}
     steps:
       - uses: actions/checkout@v3
       - name: set up JDK 17
@@ -63,7 +70,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Set up environment variables
-        run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+        run: echo "$API_KEY" >> $GITHUB_ENV
       - name: Create Firebase Config JSON
         run: echo "$FIREBASE_CONFIG" > app/google-services.json
       - name: Create Firebase Service Account JSON
