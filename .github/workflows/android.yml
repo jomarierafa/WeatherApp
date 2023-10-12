@@ -24,7 +24,7 @@ jobs:
     - name: Set up environment variables
       run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
     - name: Create Firebase Config JSON
-      run: echo "$FIREBASE_CONFIG" > google-services.json
+      run: echo "$FIREBASE_CONFIG" > app/google-services.json
     - name: Build with Gradle
       run: ./gradlew build -Papi.key="${API_KEY}" -x test
 
@@ -46,7 +46,7 @@ jobs:
       - name: Set up environment variables
         run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
       - name: Create Firebase Config JSON
-        run: echo "$FIREBASE_CONFIG" > google-services.json
+        run: echo "$FIREBASE_CONFIG" > app/google-services.json
       - name: Run Unit Tests
         run: ./gradlew test -Papi.key="${API_KEY}"
 
@@ -69,7 +69,7 @@ jobs:
       - name: Set up environment variables
         run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
       - name: Create Firebase Config JSON
-        run: echo "$FIREBASE_CONFIG" > google-services.json
+        run: echo "$FIREBASE_CONFIG" > app/google-services.json
       - name: Create Firebase Service Account JSON
         run: echo "$FIREBASE_SERVICE_CREDENTIALS" > firebase-service-account.json
       - name: Build and Deploy
