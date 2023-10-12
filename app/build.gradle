@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.appdistribution'
 }
 
 android {
@@ -30,9 +32,26 @@ android {
     }
 
     buildTypes {
+        debug {
+            firebaseAppDistribution {
+                artifactType="APK"
+                groups="sample-group"
+                releaseNotesFile="$rootDir/releasenotes.txt"
+                serviceCredentialsFile = System.getenv("FIREBASE_SERVICE_CREDENTIALS") != null
+                        ? project.file("$System.env.GITHUB_WORKSPACE/firebase-service-account.json")
+                        : project.file("$rootDir/weatherapp-e6456-93d7def3f886.json")
+            }
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            firebaseAppDistribution {
+                artifactType="APK"
+                groups="sample-group"
+                releaseNotesFile="$rootDir/releasenotes.txt"
+                serviceCredentialsFile="$rootDir/weatherapp-e6456-93d7def3f886.json"
+            }
         }
     }
     compileOptions {
