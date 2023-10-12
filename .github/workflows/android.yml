@@ -64,7 +64,7 @@ jobs:
       - name: Build and Deploy
         run: ./gradlew assembleDebug appDistributionUploadDebug -Papi.key="${API_KEY}"
 
-  env:
+    env:
     FIREBASE_SERVICE_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_CREDENTIALS }}
     FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
 
