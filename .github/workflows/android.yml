@@ -45,6 +45,9 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    env:
+      FIREBASE_SERVICE_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_CREDENTIALS }}
+      FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
     steps:
       - uses: actions/checkout@v3
       - name: set up JDK 17
@@ -63,8 +66,4 @@ jobs:
         run: echo "$FIREBASE_SERVICE_CREDENTIALS" > firebase-service-account.json
       - name: Build and Deploy
         run: ./gradlew assembleDebug appDistributionUploadDebug -Papi.key="${API_KEY}"
-
-    env:
-    FIREBASE_SERVICE_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_CREDENTIALS }}
-    FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
 
