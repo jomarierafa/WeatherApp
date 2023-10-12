@@ -42,3 +42,29 @@ jobs:
       - name: Run Unit Tests
         run: ./gradlew test -Papi.key="${API_KEY}"
 
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Set up environment variables
+        run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+      - name: Create Firebase Config JSON
+        run: echo "$FIREBASE_CONFIG" > google-services.json
+      - name: Create Firebase Service Account JSON
+        run: echo "$FIREBASE_SERVICE_CREDENTIALS" > firebase-service-account.json
+      - name: Build and Deploy
+        run: ./gradlew assembleDebug appDistributionUploadDebug -Papi.key="${API_KEY}"
+
+  env:
+    FIREBASE_SERVICE_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_CREDENTIALS }}
+    FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+
