@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.weatherapp'
+    namespace 'com.jvrcoding.weatherapp'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.weatherapp"
+        applicationId "com.jvrcoding.weatherapp"
         minSdk 24
         targetSdk 33
         versionCode 1
