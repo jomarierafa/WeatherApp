@@ -2,6 +2,7 @@ package com.jvrcoding.weatherapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.jvrcoding.weatherapp.BuildConfig
 import com.jvrcoding.weatherapp.common.Constant
 import com.jvrcoding.weatherapp.data.local.WeatherDatabase
 import com.jvrcoding.weatherapp.data.local.WeatherDatabaseCallback
@@ -49,7 +50,7 @@ class AppModule {
     fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
         val client =  OkHttpClient.Builder()
 
-        if (com.jvrcoding.weatherapp.BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
             client.addInterceptor(loggingInterceptor)
