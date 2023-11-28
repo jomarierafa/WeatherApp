@@ -14,4 +14,7 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertUser(user: User): Long
 
+    @Query("SELECT COUNT(*) FROM user")
+    suspend fun getUserCount(): Int
+
 }
