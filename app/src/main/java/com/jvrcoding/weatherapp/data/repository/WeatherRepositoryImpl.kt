@@ -1,16 +1,13 @@
 package com.jvrcoding.weatherapp.data.repository
 
 import com.jvrcoding.weatherapp.BuildConfig
-import com.jvrcoding.weatherapp.common.Constant.USERNAME
 import com.jvrcoding.weatherapp.data.local.WeatherDao
 import com.jvrcoding.weatherapp.data.local.WeatherEntity
 import com.jvrcoding.weatherapp.data.remote.WeatherApi
 import com.jvrcoding.weatherapp.data.remote.WeatherDataDto
 import com.jvrcoding.weatherapp.data.remote.toWeatherEntity
-import com.jvrcoding.weatherapp.domain.repository.DataStoreRepo
 import com.jvrcoding.weatherapp.domain.repository.WeatherRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -20,7 +17,7 @@ class WeatherRepositoryImpl @Inject constructor(
 ): WeatherRepository {
 
     override suspend fun getCurrentWeather(lat: Double, lon: Double, username: String): WeatherDataDto {
-        val data = api.getCurrentWeather(lat, lon, com.jvrcoding.weatherapp.BuildConfig.API_KEY)
+        val data = api.getCurrentWeather(lat, lon, BuildConfig.API_KEY)
         if(!data.isSuccessful && data.body() == null) {
             throw HttpException(data)
         }
