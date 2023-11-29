@@ -2,7 +2,6 @@ package com.jvrcoding.weatherapp.data.local
 
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.jvrcoding.weatherapp.common.hashPassword
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,12 +16,7 @@ class WeatherDatabaseCallback(
         // Initialize the database with first user
         CoroutineScope(Dispatchers.IO).launch {
             val userDao = appDb.get().userDao
-            userDao.insertUser(User(
-                "Sample",
-                "Account",
-                "sample",
-                "password".hashPassword()
-            ))
+            userDao.insertUser(User.initialData())
         }
     }
 
@@ -36,12 +30,7 @@ class WeatherDatabaseCallback(
             val userDao = appDb.get().userDao
 
             if (userDao.getUserCount() == 0) {
-                userDao.insertUser(User(
-                    "Sample",
-                    "Account",
-                    "sample",
-                    "password".hashPassword()
-                ))
+                userDao.insertUser(User.initialData())
             }
         }
     }
