@@ -2,8 +2,10 @@ package com.jvrcoding.weatherapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.jvrcoding.weatherapp.BuildConfig
 import com.jvrcoding.weatherapp.common.Constant
 import com.jvrcoding.weatherapp.data.local.WeatherDatabase
+import com.jvrcoding.weatherapp.data.local.WeatherDatabaseCallback
 import com.jvrcoding.weatherapp.data.remote.WeatherApi
 import com.jvrcoding.weatherapp.data.repository.DataStoreRepoImpl
 import com.jvrcoding.weatherapp.data.repository.UserRepositoryImpl
@@ -24,6 +26,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -32,12 +35,14 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideWeatherDatabase(@ApplicationContext context: Context): WeatherDatabase {
+    fun provideWeatherDatabase(@ApplicationContext context: Context, db: Provider<WeatherDatabase>): WeatherDatabase {
         return Room.databaseBuilder(
             context,
             WeatherDatabase::class.java,
             "weather_db"
-        ).build()
+        )
+            .addCallback(WeatherDatabaseCallback(db))
+            .build()
     }
 
     @Provides
@@ -45,7 +50,7 @@ class AppModule {
     fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
         val client =  OkHttpClient.Builder()
 
-        if (com.jvrcoding.weatherapp.BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
             client.addInterceptor(loggingInterceptor)
