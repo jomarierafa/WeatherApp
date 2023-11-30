@@ -2,7 +2,7 @@
    <img src="https://user-images.githubusercontent.com/36613137/232260367-84fcb344-9384-448a-8afa-79eb2cbb3658.png" />
 </p>
 
-# WeatherApp
+# WeatherApp [![Play Store](https://img.shields.io/badge/Google_Play-414141?style=for-the-badge&logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=com.jvrcoding.weatherapp)
 Simple application that display current weather in your specific area using [OpenWeather API](https://openweathermap.org/api)
 
 **Language(s):** [Kotlin](https://developer.android.com/kotlin)
