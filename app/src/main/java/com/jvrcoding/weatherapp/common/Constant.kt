@@ -10,5 +10,7 @@ object Constant {
 
     const val USERNAME = "username"
 
+    const val REMOTE_CONFIG_TAG = "REMOTE CONFIG"
+
 
 }
