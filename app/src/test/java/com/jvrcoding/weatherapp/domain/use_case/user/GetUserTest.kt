@@ -6,6 +6,7 @@ import com.jvrcoding.weatherapp.data.local.User
 import com.jvrcoding.weatherapp.data.repository.FakeDataStoreRepository
 import com.jvrcoding.weatherapp.data.repository.FakeUserRepository
 import com.google.common.truth.Truth.assertThat
+import com.jvrcoding.weatherapp.data.repository.FakeRemoteConfigRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -15,12 +16,15 @@ class GetUserTest {
     private lateinit var getUser: GetUser
     private lateinit var fakeRepository: FakeUserRepository
     private lateinit var fakeDataStoreRepository: FakeDataStoreRepository
+    private lateinit var fakeRemoteConfigRepository: FakeRemoteConfigRepository
 
     @Before
     fun setUp() {
         fakeRepository = FakeUserRepository()
         fakeDataStoreRepository = FakeDataStoreRepository()
-        getUser = GetUser(fakeRepository, fakeDataStoreRepository)
+        fakeRemoteConfigRepository = FakeRemoteConfigRepository()
+
+        getUser = GetUser(fakeRepository, fakeDataStoreRepository, fakeRemoteConfigRepository)
 
         runBlocking {
             fakeRepository.insertUser(

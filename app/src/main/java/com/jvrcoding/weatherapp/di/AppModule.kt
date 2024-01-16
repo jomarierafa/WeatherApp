@@ -8,9 +8,11 @@ import com.jvrcoding.weatherapp.data.local.WeatherDatabase
 import com.jvrcoding.weatherapp.data.local.WeatherDatabaseCallback
 import com.jvrcoding.weatherapp.data.remote.WeatherApi
 import com.jvrcoding.weatherapp.data.repository.DataStoreRepoImpl
+import com.jvrcoding.weatherapp.data.repository.RemoteConfigRepoImpl
 import com.jvrcoding.weatherapp.data.repository.UserRepositoryImpl
 import com.jvrcoding.weatherapp.data.repository.WeatherRepositoryImpl
 import com.jvrcoding.weatherapp.domain.repository.DataStoreRepo
+import com.jvrcoding.weatherapp.domain.repository.RemoteConfigRepo
 import com.jvrcoding.weatherapp.domain.repository.UserRepository
 import com.jvrcoding.weatherapp.domain.repository.WeatherRepository
 import com.jvrcoding.weatherapp.domain.use_case.user.GetUser
@@ -77,6 +79,13 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun provideRemoteConfigRepository(remoteConfigRepo: RemoteConfigRepoImpl): RemoteConfigRepo {
+//        remoteConfigRepo.initConfigs()
+        return RemoteConfigRepoImpl()
+    }
+
+    @Provides
+    @Singleton
     fun provideDataStoreRepository(@ApplicationContext context: Context): DataStoreRepo {
         return DataStoreRepoImpl(context)
     }
@@ -95,10 +104,12 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideUserUseCases(repository: UserRepository, dataStoreRepo: DataStoreRepo): UserUseCases {
+    fun provideUserUseCases(repository: UserRepository,
+                            dataStoreRepo: DataStoreRepo,
+                            remoteConfigRepo: RemoteConfigRepoImpl): UserUseCases {
         return UserUseCases(
             insertUser = InsertUser(repository),
-            getUser = GetUser(repository, dataStoreRepo)
+            getUser = GetUser(repository, dataStoreRepo, remoteConfigRepo)
         )
     }
 
