@@ -38,6 +38,7 @@ The project follows the following pattern for build versioning:
 - [DataStore](https://github.com/VMadalin/easypermissions-ktx) - data storage solution that allows you to store key-value pairs or typed objects with protocol buffers.
 - [Truth](https://github.com/google/truth) -  testing library for Java and Kotlin that makes it easy to write assertions in tests by providing a fluent and readable API.
 - [MockK](https://mockk.io/) - mocking library for Kotlin that provides a simple and powerful API for creating and working with mock objects in tests.
+- [Firebase](https://firebase.google.com) - an app development platform that helps you build and grow apps and games users love. Backed by Google and trusted by millions of businesses around the world.
 
 ## API Endpoints
 The app connects to [OpenWeather API](https://openweathermap.org/api).
