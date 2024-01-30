@@ -6,8 +6,12 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -30,6 +34,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        handleIntent(intent)
+        addDynamicShortcut()
 
         if(!isAutomaticTimeEnabled(this)) {
             buildAlertDialog(
@@ -103,6 +109,36 @@ class MainActivity : AppCompatActivity() {
         ) {
             startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun addDynamicShortcut() {
+        val shortcut = ShortcutInfoCompat.Builder(applicationContext, "dynamic")
+            .setShortLabel("sample")
+            .setLongLabel("Clicking this awit")
+            .setIcon(IconCompat.createWithResource(
+                applicationContext, R.drawable.baseline_app_shortcut_24
+            ))
+            .setIntent(
+                Intent(applicationContext, MainActivity::class.java).apply {
+                    action = Intent.ACTION_VIEW
+                    putExtra("shortcut_id", "dynamic")
+                }
+            )
+            .build()
+
+        ShortcutManagerCompat.pushDynamicShortcut(applicationContext, shortcut)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        intent?.let {
+            Log.d("awit", intent.getStringExtra("shortcut_id") ?: "")
+        }
+
     }
 }
 
