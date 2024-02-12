@@ -3,6 +3,7 @@ package com.jvrcoding.weatherapp.presentation
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
@@ -13,9 +14,12 @@ import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.jvrcoding.weatherapp.R
 import com.jvrcoding.weatherapp.common.Screen
 import com.jvrcoding.weatherapp.common.buildAlertDialog
@@ -34,10 +38,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        handleIntent(intent)
+//        handleIntent(intent)
         addDynamicShortcut()
 
-        if(!isAutomaticTimeEnabled(this)) {
+        if (!isAutomaticTimeEnabled(this)) {
             buildAlertDialog(
                 this,
                 getString(R.string.please_set_your_time_automatically),
@@ -51,8 +55,11 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MaterialTheme {
                 val navController = rememberNavController()
-                
-                NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
+
+                NavHost(
+                    navController = navController,
+                    startDestination = Screen.LoginScreen.route
+                ) {
                     composable(route = Screen.LoginScreen.route) {
                         val viewModel = hiltViewModel<LoginViewModel>()
                         LoginScreen(
@@ -79,8 +86,40 @@ class MainActivity : AppCompatActivity() {
                         MainScreen(
                             navController = navController,
                             currentWeatherViewModel = currentWeatherViewModel,
-                            weatherListViewModel= weatherListViewModel
+                            weatherListViewModel = weatherListViewModel
                         )
+                    }
+
+                    composable(
+                        route = "deeplink",
+                        deepLinks = listOf(
+                            navDeepLink {
+                                uriPattern = "weather://${getString(R.string.app_scheme_host)}/{id}"
+                                action = Intent.ACTION_VIEW
+                            },
+                            navDeepLink {
+                                uriPattern = "https://${getString(R.string.app_scheme_host)}/{id}"
+                                action = Intent.ACTION_VIEW
+                            }
+                        ),
+                        arguments = listOf(
+                            navArgument("id") {
+                                type = NavType.IntType
+                                defaultValue = -1
+                            }
+                        )
+                    ) { navBackStackEntry ->
+                        when (navBackStackEntry.arguments?.getInt("id")) {
+                            Screen.SignUpScreen.deeplinkId -> navController.navigate(Screen.SignUpScreen.route) {
+                                popUpTo(Screen.LoginScreen.route)
+                            }
+                            else -> navController.navigate(Screen.LoginScreen.route) {
+                                popUpTo(navController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
+                        }
+
                     }
                 }
             }
@@ -113,19 +152,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        handleIntent(intent)
+//        handleIntent(intent)
     }
 
     private fun addDynamicShortcut() {
         val shortcut = ShortcutInfoCompat.Builder(applicationContext, "dynamic")
-            .setShortLabel("sample")
-            .setLongLabel("Clicking this awit")
-            .setIcon(IconCompat.createWithResource(
-                applicationContext, R.drawable.baseline_app_shortcut_24
-            ))
+            .setShortLabel(getString(R.string.register))
+            .setLongLabel("Create new account")
+            .setIcon(
+                IconCompat.createWithResource(
+                    applicationContext, R.drawable.baseline_app_shortcut_24
+                )
+            )
             .setIntent(
                 Intent(applicationContext, MainActivity::class.java).apply {
                     action = Intent.ACTION_VIEW
+                    data = Uri.parse("weather://${getString(R.string.app_scheme_host)}/${Screen.SignUpScreen.deeplinkId}")
                     putExtra("shortcut_id", "dynamic")
                 }
             )

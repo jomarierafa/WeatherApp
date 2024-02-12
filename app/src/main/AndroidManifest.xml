@@ -26,6 +26,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+<!--           TODO(test if we can use only one intent filter with three scheme= jvr, https, http) -->
+            <intent-filter android:autoVerify="true">
+                <data android:host="@string/app_scheme_host" />
+                <data android:scheme="weather" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <data android:host="@string/app_scheme_host" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+
             <meta-data android:resource="@xml/shortcuts"
                 android:name="android.app.shortcuts" />
         </activity>

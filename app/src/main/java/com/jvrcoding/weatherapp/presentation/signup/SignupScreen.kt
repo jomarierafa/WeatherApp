@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import com.jvrcoding.weatherapp.R
 import com.jvrcoding.weatherapp.common.toast
-import com.jvrcoding.weatherapp.presentation.signup.SignupState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
