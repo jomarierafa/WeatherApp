@@ -12,5 +12,5 @@ sealed class SignupEvent {
 
     data class ConfirmPasswordChanged(val value: String): SignupEvent()
 
-    object Signup: SignupEvent()
+    data object Signup: SignupEvent()
 }

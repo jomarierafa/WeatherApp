@@ -1,6 +1,5 @@
 package com.jvrcoding.weatherapp.presentation.signup
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -42,7 +41,6 @@ class SignupViewModel @Inject constructor(
                 state = state.copy(confirmPassword = event.value)
             }
             is SignupEvent.Signup -> {
-                Log.d("awit", "here")
                 addUser()
             }
         }
@@ -67,7 +65,7 @@ class SignupViewModel @Inject constructor(
 
     sealed class UiEvent {
         data class ShowToast(val message: String): UiEvent()
-        object SaveUser: UiEvent()
+        data object SaveUser: UiEvent()
     }
 
 }
