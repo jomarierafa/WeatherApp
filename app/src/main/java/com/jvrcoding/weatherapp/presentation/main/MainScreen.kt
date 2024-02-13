@@ -3,7 +3,7 @@ package com.jvrcoding.weatherapp.presentation.main
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +24,7 @@ fun MainScreen(
     weatherListViewModel: WeatherListViewModel = hiltViewModel()
 ) {
     val tabs = listOf(stringResource(R.string.current_weather), stringResource(R.string.weather_list))
-    val selectedIndex = remember { mutableStateOf(0) }
+    val selectedIndex = remember { mutableIntStateOf(0) }
 
     Scaffold(
         topBar = {
@@ -38,7 +38,7 @@ fun MainScreen(
                             }
                         }
                     }) {
-                        Icon(Icons.Default.Logout, contentDescription = "Logout")
+                        Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = "Logout")
                     }
                 }
             )
@@ -47,7 +47,7 @@ fun MainScreen(
     ) { innerPadding ->
         Column(Modifier.padding(innerPadding)) {
             TabRow(
-                selectedTabIndex = selectedIndex.value,
+                selectedTabIndex = selectedIndex.intValue,
                 backgroundColor = Color.White,
                 contentColor = MaterialTheme.colors.primary,
                 modifier = Modifier.fillMaxWidth()
@@ -57,18 +57,18 @@ fun MainScreen(
                         text = {
                             Text(
                                 title,
-                                color = if(selectedIndex.value == index) MaterialTheme.colors.primary else Color.Black
+                                color = if(selectedIndex.intValue == index) MaterialTheme.colors.primary else Color.Black
                             )
                         },
-                        selected = selectedIndex.value == index,
+                        selected = selectedIndex.intValue == index,
                         onClick = {
-                            selectedIndex.value = index
+                            selectedIndex.intValue = index
                         }
                     )
                 }
             }
 
-            when (selectedIndex.value) {
+            when (selectedIndex.intValue) {
                 0 -> {
                     val state by currentWeatherViewModel.state.collectAsState()
                     CurrentWeatherScreen(

@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,12 +30,7 @@ class CurrentWeatherViewModel @Inject constructor(
     private val _state = MutableStateFlow(CurrentWeatherState())
     val state = _state.asStateFlow()
 
-    private val locationCallback = object : LocationListener {
-        override fun onLocationChanged(location: Location) {}
-        override fun onProviderEnabled(provider: String) {}
-        override fun onProviderDisabled(provider: String) {}
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-    }
+    private val locationCallback = LocationListener { }
 
     init {
         if (ContextCompat.checkSelfPermission(
