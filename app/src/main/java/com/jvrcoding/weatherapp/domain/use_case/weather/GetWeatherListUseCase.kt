@@ -14,10 +14,10 @@ class GetWeatherListUseCase @Inject constructor(
     private val repository: WeatherRepository,
     private val dataStoreRepo: DataStoreRepo
 ) {
-     operator fun invoke(): Flow<List<Weather>> {
-         val username = runBlocking {
-             dataStoreRepo.getString(USERNAME) ?: ""
-         }
+    operator fun invoke(): Flow<List<Weather>> {
+        val username = runBlocking {
+            dataStoreRepo.getString(USERNAME) ?: ""
+        }
         return repository.getWeathersByUsername(username).map {
             it.map { it.toWeather() }.sortedByDescending { it.timeCreated }
         }

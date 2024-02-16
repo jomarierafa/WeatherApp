@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.jvrcoding.weatherapp.presentation.WeatherListScreen
+import com.jvrcoding.weatherapp.presentation.main.weather_list.WeatherListScreen
 import com.jvrcoding.weatherapp.R
 import com.jvrcoding.weatherapp.common.Screen
 import com.jvrcoding.weatherapp.presentation.main.current_weather.CurrentWeatherScreen
@@ -79,7 +79,8 @@ fun MainScreen(
                 1 -> {
                     val state by weatherListViewModel.state.collectAsState()
                     WeatherListScreen(
-                        state = state
+                        state = state,
+                        onEvent = weatherListViewModel::onEvent
                     )
                 }
             }

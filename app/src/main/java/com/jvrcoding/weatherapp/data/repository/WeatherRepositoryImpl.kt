@@ -28,4 +28,8 @@ class WeatherRepositoryImpl @Inject constructor(
     override fun getWeathersByUsername(username: String): Flow<List<WeatherEntity>> {
         return dao.getWeathersByUsername(username)
     }
+
+    override suspend fun deleteWeatherById(id: Int) {
+        return dao.deleteWeatherById(id)
+    }
 }
