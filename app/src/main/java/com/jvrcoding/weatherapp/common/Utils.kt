@@ -80,7 +80,7 @@ fun buildAlertDialog(context: Context, message: String, buttonText: String, onPo
     val builder = AlertDialog.Builder(context)
     builder.setMessage(message)
         .setCancelable(false)
-        .setPositiveButton(buttonText) { dialog, id ->
+        .setPositiveButton(buttonText) { _, _ ->
             onPositiveButton()
         }
     val alert = builder.create()

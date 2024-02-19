@@ -19,6 +19,10 @@ class FakeWeatherRepository: WeatherRepository {
         emit(initialWeatherList.filter { it.username == username })
     }
 
+    override suspend fun deleteWeatherById(id: Int) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getCurrentWeather(
         lat: Double,
         lon: Double,

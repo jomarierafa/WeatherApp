@@ -44,11 +44,12 @@ fun SignupScreen(
 
     LaunchedEffect(key1 = true) {
         uiEvent.collectLatest { event ->
-            when(event) {
+            when (event) {
                 is SignupViewModel.UiEvent.SaveUser -> {
                     context.toast(context.getString(R.string.successfully_registered))
                     navController.navigateUp()
                 }
+
                 is SignupViewModel.UiEvent.ShowToast -> {
                     context.toast(event.message)
                 }
@@ -123,8 +124,8 @@ fun SignupScreen(
 
                 val description = if (passwordVisible) "Hide password" else "Show password"
 
-                IconButton(onClick = {passwordVisible = !passwordVisible}){
-                    Icon(imageVector  = image, description)
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(imageVector = image, description)
                 }
             },
             modifier = Modifier
@@ -147,20 +148,26 @@ fun SignupScreen(
 
                 val description = if (conFirmPasswordVisible) "Hide password" else "Show password"
 
-                IconButton(onClick = {conFirmPasswordVisible = !conFirmPasswordVisible}){
-                    Icon(imageVector  = image, description)
+                IconButton(onClick = { conFirmPasswordVisible = !conFirmPasswordVisible }) {
+                    Icon(imageVector = image, description)
                 }
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = dimensionResource(id = R.dimen.space_sm), bottom = dimensionResource(id = R.dimen.space_lg))
+                .padding(
+                    top = dimensionResource(id = R.dimen.space_sm),
+                    bottom = dimensionResource(id = R.dimen.space_lg)
+                )
         )
 
         Button(
             onClick = { onEvent(SignupEvent.Signup) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = stringResource(id = R.string.sign_up), modifier = Modifier.padding(dimensionResource(id = R.dimen.space_sm)))
+            Text(
+                text = stringResource(id = R.string.sign_up),
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.space_sm))
+            )
         }
 
         Button(
@@ -171,10 +178,14 @@ fun SignupScreen(
                 .fillMaxWidth()
                 .padding(vertical = dimensionResource(id = R.dimen.space_md)),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colors.primaryVariant),
-            elevation = ButtonDefaults.elevation(defaultElevation = Dp(0F), pressedElevation = Dp(0F)),
+            elevation = ButtonDefaults.elevation(
+                defaultElevation = Dp(0F),
+                pressedElevation = Dp(0F)
+            ),
             border = BorderStroke(width = Dp(1F), color = MaterialTheme.colors.primaryVariant),
         ) {
-            Text(text = stringResource(id = R.string.cancel),
+            Text(
+                text = stringResource(id = R.string.cancel),
                 modifier = Modifier.padding(dimensionResource(id = R.dimen.space_sm))
             )
         }
