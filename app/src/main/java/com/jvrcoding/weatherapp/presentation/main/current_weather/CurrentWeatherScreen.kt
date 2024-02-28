@@ -1,5 +1,6 @@
 package com.jvrcoding.weatherapp.presentation.main.current_weather
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -129,7 +130,10 @@ fun CurrentWeatherScreen(
     }
 }
 
-@Preview
+@Preview(
+    showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun PreviewMyApp() {
     CurrentWeatherScreen(
