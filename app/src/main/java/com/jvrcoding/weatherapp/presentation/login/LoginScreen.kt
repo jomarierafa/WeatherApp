@@ -24,6 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.Dp
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.navigation.NavController
@@ -204,14 +207,23 @@ fun LoginScreen(
 
 }
 
+class UsernameParameterProvider: PreviewParameterProvider<String> {
+    override val values: Sequence<String>
+        get() = sequenceOf("jom", "jomarie")
 
-@Preview
+}
+
+
+@Preview(showSystemUi = true)
+@PreviewScreenSizes
 @Composable
-fun ScreenPreview() {
+fun ScreenPreview(
+    @PreviewParameter(UsernameParameterProvider::class) username: String
+) {
     LoginScreen(
         rememberNavController(),
         state = LoginState(
-            username = "jomarie",
+            username = username,
             password = "password"
         ),
         uiEvent = flow {},
