@@ -106,7 +106,7 @@ class AppModule {
     @Singleton
     fun provideUserUseCases(repository: UserRepository,
                             dataStoreRepo: DataStoreRepo,
-                            remoteConfigRepo: RemoteConfigRepoImpl): UserUseCases {
+                            remoteConfigRepo: RemoteConfigRepo): UserUseCases {
         return UserUseCases(
             insertUser = InsertUser(repository),
             getUser = GetUser(repository, dataStoreRepo, remoteConfigRepo)

@@ -96,7 +96,7 @@ fun Activity.openAppSettings() {
 
 fun isAllPermissionGranted(
     context: Context,
-    permissions: Array<String>
+    permissions: ArrayList<String>
 ): Boolean {
     return permissions.all {
         ContextCompat.checkSelfPermission(

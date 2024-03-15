@@ -90,6 +90,7 @@ dependencies {
     implementation libs.firebase.crashlytics
     implementation libs.firebase.analytics
     implementation libs.firebase.config.ktx
+    implementation libs.firebase.messaging.ktx
 
     //compose
     implementation libs.androidx.activity.compose

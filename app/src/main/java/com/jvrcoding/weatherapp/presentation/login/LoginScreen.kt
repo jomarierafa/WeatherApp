@@ -2,6 +2,7 @@ package com.jvrcoding.weatherapp.presentation.login
 
 import android.Manifest
 import android.app.Activity
+import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -49,10 +50,14 @@ fun LoginScreen(
 
     val context = LocalContext.current
 
-    val permissionsToRequest = arrayOf(
+    val permissionsToRequest = arrayListOf(
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION,
     )
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
+    }
 
     val multiplePermissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
@@ -180,7 +185,7 @@ fun LoginScreen(
                 if(isAllPermissionGranted(context, permissionsToRequest)) {
                     onEvent(LoginEvent.Login)
                 } else {
-                    multiplePermissionResultLauncher.launch(permissionsToRequest)
+                    multiplePermissionResultLauncher.launch(permissionsToRequest.toTypedArray())
                 }
             },
             modifier = Modifier.fillMaxWidth()

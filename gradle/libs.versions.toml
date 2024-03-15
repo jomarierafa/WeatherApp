@@ -49,6 +49,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-config-ktx = { group = "com.google.firebase", name = "firebase-config-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
 
 #dagger hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt-android" }
