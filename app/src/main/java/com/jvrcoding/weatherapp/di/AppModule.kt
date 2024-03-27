@@ -5,7 +5,6 @@ import androidx.room.Room
 import com.jvrcoding.weatherapp.BuildConfig
 import com.jvrcoding.weatherapp.common.Constant
 import com.jvrcoding.weatherapp.data.local.WeatherDatabase
-import com.jvrcoding.weatherapp.data.local.WeatherDatabaseCallback
 import com.jvrcoding.weatherapp.data.remote.WeatherApi
 import com.jvrcoding.weatherapp.data.repository.DataStoreRepoImpl
 import com.jvrcoding.weatherapp.data.repository.RemoteConfigRepoImpl
@@ -42,9 +41,7 @@ class AppModule {
             context,
             WeatherDatabase::class.java,
             "weather_db"
-        )
-            .addCallback(WeatherDatabaseCallback(db))
-            .build()
+        ).build()
     }
 
     @Provides
