@@ -9,11 +9,10 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.jvrcoding.weatherapp.common.Constant.DATASTORE_NAME
 import com.jvrcoding.weatherapp.domain.repository.DataStoreRepo
 import kotlinx.coroutines.flow.first
-import javax.inject.Inject
 
 val Context.dataStore : DataStore<Preferences> by  preferencesDataStore(name = DATASTORE_NAME)
 
-class DataStoreRepoImpl @Inject constructor(
+class DataStoreRepoImpl(
     private val context: Context
 ) : DataStoreRepo {
 

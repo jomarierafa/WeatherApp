@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".WeatherApp"
@@ -16,6 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherApp"
         tools:targetApi="31">
+
+       <!--Initializer-->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data  android:name="com.jvrcoding.weatherapp.common.initializer.DatabaseInitializer"
+                android:value="androidx.startup" />
+        </provider>
 
         <activity
             android:name=".presentation.MainActivity"
@@ -49,6 +60,13 @@
             <meta-data android:resource="@xml/shortcuts"
                 android:name="android.app.shortcuts" />
         </activity>
+        <service
+            android:name=".PushNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

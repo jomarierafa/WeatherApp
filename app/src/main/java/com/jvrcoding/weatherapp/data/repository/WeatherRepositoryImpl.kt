@@ -9,9 +9,8 @@ import com.jvrcoding.weatherapp.data.remote.toWeatherEntity
 import com.jvrcoding.weatherapp.domain.repository.WeatherRepository
 import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
-import javax.inject.Inject
 
-class WeatherRepositoryImpl @Inject constructor(
+class WeatherRepositoryImpl(
     private val dao: WeatherDao,
     private val api: WeatherApi
 ): WeatherRepository {

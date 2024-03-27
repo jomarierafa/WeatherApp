@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        handleIntent(intent)
+
         addDynamicShortcut()
 
         if (!isAutomaticTimeEnabled(this)) {
@@ -124,6 +124,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        //handle intent came from notification that received when app is in background/Killed
+        //handleIntent(intent)
+
     }
 
     override fun onResume() {
@@ -167,7 +171,8 @@ class MainActivity : AppCompatActivity() {
             .setIntent(
                 Intent(applicationContext, MainActivity::class.java).apply {
                     action = Intent.ACTION_VIEW
-                    data = Uri.parse("weather://${getString(R.string.app_scheme_host)}/${Screen.SignUpScreen.deeplinkId}")
+                    data =
+                        Uri.parse("weather://${getString(R.string.app_scheme_host)}/${Screen.SignUpScreen.deeplinkId}")
                     putExtra("shortcut_id", "dynamic")
                 }
             )
@@ -177,9 +182,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleIntent(intent: Intent?) {
-        intent?.let {
-            Log.d("awit", intent.getStringExtra("shortcut_id") ?: "")
-        }
+        intent?.let {}
 
     }
 }
