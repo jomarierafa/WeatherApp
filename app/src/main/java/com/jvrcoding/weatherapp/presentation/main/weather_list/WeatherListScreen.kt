@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.jvrcoding.weatherapp.common.SwipeToDeleteContainer
+import com.jvrcoding.weatherapp.common.components.SwipeToDeleteContainer
 
 @Composable
 fun WeatherListScreen(

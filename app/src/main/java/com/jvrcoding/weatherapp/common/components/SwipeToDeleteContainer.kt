@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.jvrcoding.weatherapp.common
+package com.jvrcoding.weatherapp.common.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween

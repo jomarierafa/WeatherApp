@@ -34,6 +34,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.jvrcoding.weatherapp.R
 import com.jvrcoding.weatherapp.common.*
+import com.jvrcoding.weatherapp.common.components.LocationFinePermissionTextProvider
+import com.jvrcoding.weatherapp.common.components.PermissionDialog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
