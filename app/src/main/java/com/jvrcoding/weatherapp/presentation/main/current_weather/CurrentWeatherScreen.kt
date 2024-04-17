@@ -1,6 +1,7 @@
 package com.jvrcoding.weatherapp.presentation.main.current_weather
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,6 +9,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -17,7 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import com.jvrcoding.weatherapp.R
@@ -26,14 +27,32 @@ import com.jvrcoding.weatherapp.domain.model.Weather
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.emptyFlow
 
 
 @Composable
 fun CurrentWeatherScreen(
     state: CurrentWeatherState,
-    onEvent: (CurrentWeatherEvent) -> Unit
+    onEvent: (CurrentWeatherEvent) -> Unit,
+    uiEvent: Flow<CurrentWeatherViewModel.UiEvent>
 ) {
     val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        uiEvent.collectLatest { event ->
+            when(event) {
+                is CurrentWeatherViewModel.UiEvent.Error -> {
+                    Toast.makeText(
+                        context,
+                        event.error.asString(context),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(state.isLoading),
@@ -153,6 +172,7 @@ fun PreviewMyApp() {
                 temperature = 5.6
             )
         ),
-        onEvent = {}
+        onEvent = {},
+        uiEvent = emptyFlow()
     )
 }

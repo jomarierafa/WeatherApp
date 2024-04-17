@@ -4,7 +4,7 @@ import com.jvrcoding.weatherapp.data.local.User
 import com.jvrcoding.weatherapp.data.local.UserDao
 import com.jvrcoding.weatherapp.domain.repository.UserRepository
 
-class UserRepositoryImpl(
+class UserRepoImpl(
     private val dao: UserDao
 ): UserRepository {
 

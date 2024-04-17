@@ -1,4 +1,4 @@
-package com.jvrcoding.weatherapp.common.components
+package com.jvrcoding.weatherapp.presentation.util
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

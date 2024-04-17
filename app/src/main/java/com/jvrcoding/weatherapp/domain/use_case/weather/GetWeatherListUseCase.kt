@@ -1,7 +1,6 @@
 package com.jvrcoding.weatherapp.domain.use_case.weather
 
 import com.jvrcoding.weatherapp.common.Constant.USERNAME
-import com.jvrcoding.weatherapp.data.remote.toWeather
 import com.jvrcoding.weatherapp.domain.model.Weather
 import com.jvrcoding.weatherapp.domain.repository.DataStoreRepo
 import com.jvrcoding.weatherapp.domain.repository.WeatherRepository
@@ -19,7 +18,7 @@ class GetWeatherListUseCase @Inject constructor(
             dataStoreRepo.getString(USERNAME) ?: ""
         }
         return repository.getWeathersByUsername(username).map {
-            it.map { it.toWeather() }.sortedByDescending { it.timeCreated }
+            it.sortedByDescending { it.timeCreated }
         }
     }
 }

@@ -11,7 +11,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.jvrcoding.weatherapp.common.Screen
+import com.jvrcoding.weatherapp.presentation.util.Screen
 import com.jvrcoding.weatherapp.presentation.MainActivity
 import kotlin.math.abs
 

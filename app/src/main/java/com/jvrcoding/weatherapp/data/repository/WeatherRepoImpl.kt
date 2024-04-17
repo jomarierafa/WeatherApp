@@ -2,15 +2,20 @@ package com.jvrcoding.weatherapp.data.repository
 
 import com.jvrcoding.weatherapp.BuildConfig
 import com.jvrcoding.weatherapp.data.local.WeatherDao
-import com.jvrcoding.weatherapp.data.local.WeatherEntity
 import com.jvrcoding.weatherapp.data.remote.WeatherApi
 import com.jvrcoding.weatherapp.data.remote.WeatherDataDto
+import com.jvrcoding.weatherapp.data.remote.toWeather
 import com.jvrcoding.weatherapp.data.remote.toWeatherEntity
+import com.jvrcoding.weatherapp.data.util.safeCall
+import com.jvrcoding.weatherapp.domain.util.DataError
+import com.jvrcoding.weatherapp.domain.util.Result
+import com.jvrcoding.weatherapp.domain.model.Weather
 import com.jvrcoding.weatherapp.domain.repository.WeatherRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 
-class WeatherRepositoryImpl(
+class WeatherRepoImpl(
     private val dao: WeatherDao,
     private val api: WeatherApi
 ): WeatherRepository {
@@ -24,8 +29,22 @@ class WeatherRepositoryImpl(
         return data.body()!!
     }
 
-    override fun getWeathersByUsername(username: String): Flow<List<WeatherEntity>> {
-        return dao.getWeathersByUsername(username)
+    override suspend fun getCurrentWeather2(
+        lat: Double,
+        lon: Double,
+        username: String
+    ): Result<Weather, DataError.Network> {
+        return safeCall {
+            val data = api.getCurrentWeather(lat, lon, BuildConfig.API_KEY)
+            dao.insertWeather(data.body()!!.toWeatherEntity(username))
+            data.body()!!.toWeather()
+        }
+    }
+
+    override fun getWeathersByUsername(username: String): Flow<List<Weather>> {
+        return dao.getWeathersByUsername(username).map {
+            it.map { it.toWeather() }
+        }
     }
 
     override suspend fun deleteWeatherById(id: Int) {

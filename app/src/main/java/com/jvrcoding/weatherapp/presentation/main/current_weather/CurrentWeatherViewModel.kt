@@ -10,8 +10,10 @@ import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jvrcoding.weatherapp.common.Resource
-import com.jvrcoding.weatherapp.domain.use_case.weather.GetWeatherUseCase
+import com.jvrcoding.weatherapp.domain.util.Result
+import com.jvrcoding.weatherapp.domain.use_case.weather.GetWeatherUseCase2
+import com.jvrcoding.weatherapp.presentation.util.UiText
+import com.jvrcoding.weatherapp.presentation.util.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
@@ -19,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CurrentWeatherViewModel @Inject constructor(
-    private val getWeatherUseCase: GetWeatherUseCase,
+    private val getWeatherUseCase: GetWeatherUseCase2,
     @ApplicationContext context: Context
 ): ViewModel() {
 
@@ -30,8 +32,12 @@ class CurrentWeatherViewModel @Inject constructor(
     private val _state = MutableStateFlow(CurrentWeatherState())
     val state = _state.asStateFlow()
 
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
     private val locationCallback = LocationListener { }
 
+    //TODO("check alternative way to call this part")
     init {
         if (ContextCompat.checkSelfPermission(
                 context,
@@ -60,25 +66,22 @@ class CurrentWeatherViewModel @Inject constructor(
                 getCurrentWeather()
             }
         }
-
     }
 
     fun getCurrentWeather() {
         val location = getCurrentLocation()
-        getWeatherUseCase(location?.latitude ?: 14.6091, location?.longitude ?: 121.0223).onEach { result ->
+        //TODO("check loading implementation")
+        _state.value = _state.value.copy(isLoading = true)
+        getWeatherUseCase(location?.latitude, location?.longitude).onEach { result ->
             when(result) {
-                is Resource.Success -> {
+                is Result.Success -> {
                     _state.value = CurrentWeatherState(weather = result.data)
                 }
-                is Resource.Error -> {
-                    _state.value = CurrentWeatherState(
-                        error = result.message ?: "An unexpected error occurred"
-                    )
+                is Result.Error -> {
+                    _state.value = _state.value.copy(isLoading = false)
+                    val errorMessage = result.error.asUiText()
+                    _eventFlow.emit(UiEvent.Error(errorMessage))
                 }
-                is Resource.Loading -> {
-                    _state.value = _state.value.copy(isLoading = true)
-                }
-
             }
         }.launchIn(viewModelScope)
     }
@@ -86,5 +89,9 @@ class CurrentWeatherViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         locationManager.removeUpdates(locationCallback)
+    }
+
+    sealed class UiEvent {
+        data class Error(val error: UiText): UiEvent()
     }
 }

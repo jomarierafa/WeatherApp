@@ -3,7 +3,7 @@ package com.jvrcoding.weatherapp.domain.use_case.weather
 import com.jvrcoding.weatherapp.common.Resource
 import com.jvrcoding.weatherapp.data.remote.*
 import com.jvrcoding.weatherapp.data.repository.FakeDataStoreRepository
-import com.jvrcoding.weatherapp.data.repository.WeatherRepositoryImpl
+import com.jvrcoding.weatherapp.data.repository.WeatherRepoImpl
 import com.google.common.truth.Truth
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -19,7 +19,7 @@ import java.io.IOException
 class GetWeatherUseCaseTest {
 
     private lateinit var useCase: GetWeatherUseCase
-    private lateinit var mockRepository: WeatherRepositoryImpl
+    private lateinit var mockRepository: WeatherRepoImpl
     private lateinit var fakeDataStoreRepository: FakeDataStoreRepository
 
     @Before
