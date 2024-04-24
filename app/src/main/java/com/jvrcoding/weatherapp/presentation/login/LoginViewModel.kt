@@ -1,14 +1,15 @@
 package com.jvrcoding.weatherapp.presentation.login
 
-import android.util.Log
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jvrcoding.weatherapp.data.local.InvalidUserException
 import com.jvrcoding.weatherapp.domain.use_case.user.UserUseCases
+import com.jvrcoding.weatherapp.domain.util.ifError
+import com.jvrcoding.weatherapp.domain.util.ifSuccess
+import com.jvrcoding.weatherapp.presentation.util.UiText
+import com.jvrcoding.weatherapp.presentation.util.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -56,22 +57,19 @@ class LoginViewModel @Inject constructor(
 
     fun login() {
         viewModelScope.launch {
-            try {
-                userUseCases.getUser(state.username, state.password)
-                _eventFlow.emit(UiEvent.SuccessfullyLogin)
-            } catch (e: InvalidUserException) {
-                _eventFlow.emit(
-                    UiEvent.ShowToast(
-                        message = e.message ?: "Unknown Error"
-                    )
-                )
-            }
+            userUseCases.getUser(state.username, state.password)
+                .ifSuccess {
+                    _eventFlow.emit(UiEvent.SuccessfullyLogin)
+                }
+                .ifError { error ->
+                    _eventFlow.emit(UiEvent.ShowToast(error.asUiText()))
+                }
         }
     }
 
 
     sealed class UiEvent {
-        data class ShowToast(val message: String): UiEvent()
+        data class ShowToast(val message: UiText): UiEvent()
         object SuccessfullyLogin: UiEvent()
     }
 }

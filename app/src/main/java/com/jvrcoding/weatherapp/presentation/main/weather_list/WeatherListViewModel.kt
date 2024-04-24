@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jvrcoding.weatherapp.domain.use_case.weather.DeleteWeatherUseCase
 import com.jvrcoding.weatherapp.domain.use_case.weather.GetWeatherListUseCase
+import com.jvrcoding.weatherapp.domain.util.ifSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -36,8 +37,10 @@ class WeatherListViewModel @Inject constructor(
     }
 
     private fun getWeatherList() {
-        getWeatherListUseCase().onEach { list ->
-            _state.value = state.value.copy(weathers = list)
+        getWeatherListUseCase().onEach { result ->
+            result.ifSuccess { data ->
+                _state.value = state.value.copy(weathers = data)
+            }
         }.launchIn(viewModelScope)
     }
 

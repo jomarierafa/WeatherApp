@@ -110,7 +110,7 @@ fun LoginScreen(
                 is LoginViewModel.UiEvent.ShowToast -> {
                     Toast.makeText(
                         context,
-                        event.message,
+                        event.message.asString(context),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

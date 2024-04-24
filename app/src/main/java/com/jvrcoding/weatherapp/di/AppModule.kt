@@ -73,6 +73,10 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun provideUserDataValidator(): UserDataValidator = UserDataValidator()
+
+    @Provides
+    @Singleton
     fun provideWeatherApi(retrofit: Retrofit): WeatherApi = retrofit.create(WeatherApi::class.java)
 
     @Provides
@@ -104,15 +108,12 @@ class AppModule {
     @Singleton
     fun provideUserUseCases(repository: UserRepository,
                             dataStoreRepo: DataStoreRepo,
-                            remoteConfigRepo: RemoteConfigRepo): UserUseCases {
+                            remoteConfigRepo: RemoteConfigRepo,
+                            userDataValidator: UserDataValidator): UserUseCases {
         return UserUseCases(
-            insertUser = InsertUser(repository),
-            getUser = GetUser(repository, dataStoreRepo, remoteConfigRepo)
+            insertUser = InsertUser(repository, userDataValidator),
+            getUser = GetUser(repository, dataStoreRepo, remoteConfigRepo, userDataValidator)
         )
     }
-
-    @Provides
-    @Singleton
-    fun provideUserDataValidator(): UserDataValidator = UserDataValidator()
 
 }

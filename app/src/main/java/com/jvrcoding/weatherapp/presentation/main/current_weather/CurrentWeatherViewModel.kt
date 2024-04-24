@@ -10,8 +10,9 @@ import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jvrcoding.weatherapp.domain.util.Result
-import com.jvrcoding.weatherapp.domain.use_case.weather.GetWeatherUseCase2
+import com.jvrcoding.weatherapp.domain.use_case.weather.GetWeatherUseCase
+import com.jvrcoding.weatherapp.domain.util.ifError
+import com.jvrcoding.weatherapp.domain.util.ifSuccess
 import com.jvrcoding.weatherapp.presentation.util.UiText
 import com.jvrcoding.weatherapp.presentation.util.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,9 +22,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CurrentWeatherViewModel @Inject constructor(
-    private val getWeatherUseCase: GetWeatherUseCase2,
+    private val getWeatherUseCase: GetWeatherUseCase,
     @ApplicationContext context: Context
-): ViewModel() {
+) : ViewModel() {
 
     private val locationManager: LocationManager by lazy {
         context.getSystemService(LOCATION_SERVICE) as LocationManager
@@ -42,7 +43,8 @@ class CurrentWeatherViewModel @Inject constructor(
         if (ContextCompat.checkSelfPermission(
                 context,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED) {
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             startLocationUpdate()
         }
     }
@@ -61,7 +63,7 @@ class CurrentWeatherViewModel @Inject constructor(
     }
 
     fun onEvent(event: CurrentWeatherEvent) {
-        when(event) {
+        when (event) {
             CurrentWeatherEvent.SwipeRefresh -> {
                 getCurrentWeather()
             }
@@ -73,16 +75,14 @@ class CurrentWeatherViewModel @Inject constructor(
         //TODO("check loading implementation")
         _state.value = _state.value.copy(isLoading = true)
         getWeatherUseCase(location?.latitude, location?.longitude).onEach { result ->
-            when(result) {
-                is Result.Success -> {
-                    _state.value = CurrentWeatherState(weather = result.data)
-                }
-                is Result.Error -> {
-                    _state.value = _state.value.copy(isLoading = false)
-                    val errorMessage = result.error.asUiText()
-                    _eventFlow.emit(UiEvent.Error(errorMessage))
-                }
+            result.ifSuccess { data ->
+                _state.value = CurrentWeatherState(weather = data)
+            }.ifError { error ->
+                _state.value = _state.value.copy(isLoading = false)
+                val errorMessage = error.asUiText()
+                _eventFlow.emit(UiEvent.Error(errorMessage))
             }
+
         }.launchIn(viewModelScope)
     }
 
@@ -92,6 +92,6 @@ class CurrentWeatherViewModel @Inject constructor(
     }
 
     sealed class UiEvent {
-        data class Error(val error: UiText): UiEvent()
+        data class Error(val error: UiText) : UiEvent()
     }
 }
