@@ -16,7 +16,7 @@ class WeatherDatabaseCallback(
         // Initialize the database with first user
         CoroutineScope(Dispatchers.IO).launch {
             val userDao = appDb.get().userDao
-            userDao.insertUser(User.initialData())
+            userDao.insertUser(UserEntity.initialData())
         }
     }
 
@@ -30,7 +30,7 @@ class WeatherDatabaseCallback(
             val userDao = appDb.get().userDao
 
             if (userDao.getUserCount() == 0) {
-                userDao.insertUser(User.initialData())
+                userDao.insertUser(UserEntity.initialData())
             }
         }
     }

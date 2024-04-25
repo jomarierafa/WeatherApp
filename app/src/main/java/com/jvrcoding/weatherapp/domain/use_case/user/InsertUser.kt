@@ -1,6 +1,6 @@
 package com.jvrcoding.weatherapp.domain.use_case.user
 
-import com.jvrcoding.weatherapp.data.local.User
+import com.jvrcoding.weatherapp.domain.model.User
 import com.jvrcoding.weatherapp.domain.repository.UserRepository
 import com.jvrcoding.weatherapp.domain.util.Error
 import com.jvrcoding.weatherapp.domain.util.Result

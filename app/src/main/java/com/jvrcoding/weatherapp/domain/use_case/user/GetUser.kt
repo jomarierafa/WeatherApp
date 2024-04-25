@@ -2,7 +2,7 @@ package com.jvrcoding.weatherapp.domain.use_case.user
 
 import com.jvrcoding.weatherapp.common.Constant
 import com.jvrcoding.weatherapp.common.DefaultConfigs
-import com.jvrcoding.weatherapp.data.local.User
+import com.jvrcoding.weatherapp.domain.model.User
 import com.jvrcoding.weatherapp.domain.repository.DataStoreRepo
 import com.jvrcoding.weatherapp.domain.repository.RemoteConfigRepo
 import com.jvrcoding.weatherapp.domain.repository.UserRepository

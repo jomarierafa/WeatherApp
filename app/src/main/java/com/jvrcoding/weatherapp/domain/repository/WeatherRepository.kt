@@ -11,6 +11,5 @@ interface WeatherRepository {
 
     fun getWeathersByUsername(username: String): Flow<Result<List<Weather>, DataError.Local>>
 
-
     suspend fun deleteWeatherById(id: Int)
 }

@@ -1,6 +1,6 @@
 package com.jvrcoding.weatherapp.domain.util
 
-import com.jvrcoding.weatherapp.data.local.User
+import com.jvrcoding.weatherapp.domain.model.User
 
 //TODO("move to different package")
 class UserDataValidator {

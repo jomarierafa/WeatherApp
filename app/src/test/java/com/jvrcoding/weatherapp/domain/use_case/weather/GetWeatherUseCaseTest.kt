@@ -5,28 +5,31 @@ import com.jvrcoding.weatherapp.data.remote.*
 import com.jvrcoding.weatherapp.data.repository.FakeDataStoreRepository
 import com.jvrcoding.weatherapp.data.repository.WeatherRepoImpl
 import com.google.common.truth.Truth
+import com.jvrcoding.weatherapp.data.mapper.toWeather
+import com.jvrcoding.weatherapp.domain.util.DataError
+import com.jvrcoding.weatherapp.domain.util.Result
+import com.jvrcoding.weatherapp.domain.util.UserDataValidator
+import com.jvrcoding.weatherapp.domain.util.ifSuccess
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.runBlocking
-import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Before
 import org.junit.Test
-import retrofit2.HttpException
-import retrofit2.Response
-import java.io.IOException
 
 class GetWeatherUseCaseTest {
 
     private lateinit var useCase: GetWeatherUseCase
     private lateinit var mockRepository: WeatherRepoImpl
     private lateinit var fakeDataStoreRepository: FakeDataStoreRepository
+    private lateinit var userDataValidator: UserDataValidator
 
     @Before
     fun setUp() {
         mockRepository = mockk()
         fakeDataStoreRepository = FakeDataStoreRepository()
-        useCase = GetWeatherUseCase(mockRepository, fakeDataStoreRepository)
+        userDataValidator = UserDataValidator()
+        useCase = GetWeatherUseCase(mockRepository, fakeDataStoreRepository, userDataValidator)
     }
 
     @Test
@@ -42,11 +45,15 @@ class GetWeatherUseCaseTest {
         )
 
         val expected = Resource.Success(weatherDto.toWeather())
-        coEvery { mockRepository.getCurrentWeather(lat, lon, username) } returns weatherDto
+        coEvery { mockRepository.getCurrentWeather(lat, lon, username) } returns Result.Success(weatherDto.toWeather())
 
-        val result = useCase(lat, lon).last()
+        useCase(lat, lon).collectLatest {
+            it.ifSuccess { data ->
+                Truth.assertThat(data.copy(timeCreated = 0L)).isEqualTo(expected.data?.copy(timeCreated = 0L))
+            }
+        }
 
-        Truth.assertThat(result.data?.copy(timeCreated = 0L)).isEqualTo(expected.data?.copy(timeCreated = 0L))
+
     }
 
     @Test
@@ -54,10 +61,11 @@ class GetWeatherUseCaseTest {
         val lat = 999.999
         val lon = 999.999
         val username = "username"
-        coEvery { mockRepository.getCurrentWeather(lat, lon, username) } throws HttpException(Response.error<Any>(404, "".toResponseBody()))
+        coEvery { mockRepository.getCurrentWeather(lat, lon, username) } returns Result.Error(DataError.Network.NOT_FOUND)
 
-        val result = useCase(lat, lon).last()
-        Truth.assertThat(result).isInstanceOf(Resource.Error::class.java)
+        useCase(lat, lon).collectLatest { error ->
+            Truth.assertThat(error).isEqualTo(Result.Error(DataError.Network.NOT_FOUND))
+        }
     }
 
     @Test
@@ -65,11 +73,11 @@ class GetWeatherUseCaseTest {
         val lat = 37.7749
         val lon = -122.4194
         val username = "username"
-        val expected = Resource.Error("Couldn't reach server. Check your internet connection.", null)
-        coEvery { mockRepository.getCurrentWeather(lat, lon, username) } throws IOException()
+        coEvery { mockRepository.getCurrentWeather(lat, lon, username) }returns Result.Error(DataError.Network.NO_INTERNET)
 
-        val result = useCase(lat, lon).last()
+        useCase(lat, lon).collectLatest { error ->
+            Truth.assertThat(error).isEqualTo(Result.Error(DataError.Network.NO_INTERNET))
+        }
 
-        Truth.assertThat(result.message).isEqualTo(expected.message)
     }
 }

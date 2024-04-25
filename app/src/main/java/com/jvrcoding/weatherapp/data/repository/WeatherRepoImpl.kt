@@ -3,8 +3,8 @@ package com.jvrcoding.weatherapp.data.repository
 import com.jvrcoding.weatherapp.BuildConfig
 import com.jvrcoding.weatherapp.data.local.WeatherDao
 import com.jvrcoding.weatherapp.data.remote.WeatherApi
-import com.jvrcoding.weatherapp.data.remote.toWeather
-import com.jvrcoding.weatherapp.data.remote.toWeatherEntity
+import com.jvrcoding.weatherapp.data.mapper.toWeather
+import com.jvrcoding.weatherapp.data.mapper.toWeatherEntity
 import com.jvrcoding.weatherapp.data.util.safeCall
 import com.jvrcoding.weatherapp.domain.util.DataError
 import com.jvrcoding.weatherapp.domain.util.Result

@@ -1,6 +1,7 @@
-package com.jvrcoding.weatherapp.data.remote
+package com.jvrcoding.weatherapp.data.mapper
 
 import com.jvrcoding.weatherapp.data.local.WeatherEntity
+import com.jvrcoding.weatherapp.data.remote.WeatherDataDto
 import com.jvrcoding.weatherapp.domain.model.Weather
 import java.time.Instant
 

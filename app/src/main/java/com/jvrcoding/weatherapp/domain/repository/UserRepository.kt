@@ -1,6 +1,6 @@
 package com.jvrcoding.weatherapp.domain.repository
 
-import com.jvrcoding.weatherapp.data.local.User
+import com.jvrcoding.weatherapp.domain.model.User
 import com.jvrcoding.weatherapp.domain.util.DataError
 import com.jvrcoding.weatherapp.domain.util.Result
 
