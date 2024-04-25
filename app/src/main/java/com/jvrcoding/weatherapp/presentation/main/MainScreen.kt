@@ -12,7 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jvrcoding.weatherapp.presentation.main.weather_list.WeatherListScreen
 import com.jvrcoding.weatherapp.R
-import com.jvrcoding.weatherapp.common.Screen
+import com.jvrcoding.weatherapp.presentation.util.Screen
 import com.jvrcoding.weatherapp.presentation.main.current_weather.CurrentWeatherScreen
 import com.jvrcoding.weatherapp.presentation.main.current_weather.CurrentWeatherViewModel
 import com.jvrcoding.weatherapp.presentation.main.weather_list.WeatherListViewModel
@@ -73,7 +73,8 @@ fun MainScreen(
                     val state by currentWeatherViewModel.state.collectAsState()
                     CurrentWeatherScreen(
                         state = state,
-                        onEvent = currentWeatherViewModel::onEvent
+                        onEvent = currentWeatherViewModel::onEvent,
+                        uiEvent = currentWeatherViewModel.eventFlow
                     )
                 }
                 1 -> {

@@ -2,9 +2,15 @@ package com.jvrcoding.weatherapp.domain.use_case.user
 
 import com.jvrcoding.weatherapp.common.hashPassword
 import com.jvrcoding.weatherapp.data.local.InvalidUserException
-import com.jvrcoding.weatherapp.data.local.User
+import com.jvrcoding.weatherapp.data.local.UserEntity
 import com.jvrcoding.weatherapp.data.repository.FakeUserRepository
 import com.google.common.truth.Truth
+import com.jvrcoding.weatherapp.domain.model.User
+import com.jvrcoding.weatherapp.domain.util.DataError
+import com.jvrcoding.weatherapp.domain.util.Error
+import com.jvrcoding.weatherapp.domain.util.UserDataValidator
+import com.jvrcoding.weatherapp.domain.util.ifError
+import com.jvrcoding.weatherapp.domain.util.ifSuccess
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -13,18 +19,21 @@ class InsertUserTest {
 
     private lateinit var insertUser: InsertUser
     private lateinit var fakeRepository: FakeUserRepository
+    private lateinit var userDataValidator: UserDataValidator
 
     @Before
     fun setUp() {
         fakeRepository = FakeUserRepository()
-        insertUser = InsertUser(fakeRepository)
+        userDataValidator = UserDataValidator()
+        insertUser = InsertUser(fakeRepository, userDataValidator)
 
         runBlocking {
             fakeRepository.insertUser(
                 User(firstname = "Jomarie",
                     lastname = "Rafa",
                     username = "jom",
-                    password = "password123".hashPassword()
+                    password = "password123".hashPassword(),
+                    confirmPassword = "password123".hashPassword()
                 )
             )
         }
@@ -40,8 +49,9 @@ class InsertUserTest {
             confirmPassword = "password",
         )
 
-        val result = insertUser(user)
-        Truth.assertThat(result).isEqualTo(Unit)
+        insertUser(user).ifSuccess { result ->
+            Truth.assertThat(result).isEqualTo(Unit)
+        }
 
     }
 
@@ -56,7 +66,7 @@ class InsertUserTest {
             confirmPassword = "password",
         )
 
-        testInputs(user, "Username already exists.")
+        testInputs(user, DataError.Local.USERNAME_ALREADY_EXIST)
     }
 
 
@@ -70,7 +80,7 @@ class InsertUserTest {
             confirmPassword = "password",
         )
 
-        testInputs(user, "Firstname can't be empty.")
+        testInputs(user, UserDataValidator.RegistrationError.FIRSTNAME_IS_EMPTY)
     }
 
     @Test
@@ -83,7 +93,7 @@ class InsertUserTest {
             confirmPassword = "password",
         )
 
-        testInputs(user, "LastName can't be empty.")
+        testInputs(user, UserDataValidator.RegistrationError.LASTNAME_IS_EMPTY)
     }
 
     @Test
@@ -96,7 +106,7 @@ class InsertUserTest {
             confirmPassword = "password",
         )
 
-        testInputs(user, "Username can't be empty.")
+        testInputs(user, UserDataValidator.RegistrationError.USERNAME_IS_EMPTY)
     }
 
     @Test
@@ -109,7 +119,7 @@ class InsertUserTest {
             confirmPassword = "password",
         )
 
-        testInputs(user, "Password can't be empty.")
+        testInputs(user, UserDataValidator.RegistrationError.PASSWORD_IS_EMPTY)
     }
 
     @Test
@@ -122,7 +132,7 @@ class InsertUserTest {
             confirmPassword = "",
         )
 
-        testInputs(user, "Confirm Password can't be empty.")
+        testInputs(user, UserDataValidator.RegistrationError.CONFIRM_PASSWORD_IS_EMPTY)
     }
 
     @Test
@@ -135,14 +145,12 @@ class InsertUserTest {
             confirmPassword = "passwword123",
         )
 
-        testInputs(user, "Password not match.")
+        testInputs(user, UserDataValidator.RegistrationError.PASSWORD_NOT_MATCH)
     }
 
-    private suspend fun testInputs(user: User, exceptionMessage: String) {
-        try {
-            insertUser(user)
-        } catch (e: InvalidUserException) {
-            Truth.assertThat(e).hasMessageThat().isEqualTo(exceptionMessage)
+    private suspend fun testInputs(user: User, expectedError: Error) {
+        insertUser(user).ifError { error ->
+            Truth.assertThat(error).isEqualTo(expectedError)
         }
     }
 

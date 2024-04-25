@@ -1,6 +1,6 @@
 package com.jvrcoding.weatherapp.presentation.signup
 
-import com.jvrcoding.weatherapp.data.local.User
+import com.jvrcoding.weatherapp.domain.model.User
 
 data class SignupState(
     val firstname: String = "",

@@ -7,7 +7,6 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -21,7 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.jvrcoding.weatherapp.R
-import com.jvrcoding.weatherapp.common.Screen
+import com.jvrcoding.weatherapp.presentation.util.Screen
 import com.jvrcoding.weatherapp.common.buildAlertDialog
 import com.jvrcoding.weatherapp.common.isAutomaticTimeEnabled
 import com.jvrcoding.weatherapp.presentation.main.MainScreen

@@ -6,16 +6,16 @@ import androidx.room.PrimaryKey
 import com.jvrcoding.weatherapp.common.hashPassword
 
 @Entity
-data class User(
+data class UserEntity(
     val firstname: String,
     val lastname: String,
     @PrimaryKey val username: String,
     val password: String,
-    @Ignore val confirmPassword: String
+    @Ignore val confirmPassword: String // TODO(will remove after test case refactor)
 ) {
     companion object {
-        fun initialData(): User {
-            return User(
+        fun initialData(): UserEntity {
+            return UserEntity(
                 firstname = "Sample",
                 lastname = "Account",
                 username = "sample",

@@ -10,8 +10,11 @@ import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jvrcoding.weatherapp.common.Resource
 import com.jvrcoding.weatherapp.domain.use_case.weather.GetWeatherUseCase
+import com.jvrcoding.weatherapp.domain.util.ifError
+import com.jvrcoding.weatherapp.domain.util.ifSuccess
+import com.jvrcoding.weatherapp.presentation.util.UiText
+import com.jvrcoding.weatherapp.presentation.util.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
@@ -21,7 +24,7 @@ import javax.inject.Inject
 class CurrentWeatherViewModel @Inject constructor(
     private val getWeatherUseCase: GetWeatherUseCase,
     @ApplicationContext context: Context
-): ViewModel() {
+) : ViewModel() {
 
     private val locationManager: LocationManager by lazy {
         context.getSystemService(LOCATION_SERVICE) as LocationManager
@@ -30,13 +33,18 @@ class CurrentWeatherViewModel @Inject constructor(
     private val _state = MutableStateFlow(CurrentWeatherState())
     val state = _state.asStateFlow()
 
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
     private val locationCallback = LocationListener { }
 
+    //TODO("check alternative way to call this part")
     init {
         if (ContextCompat.checkSelfPermission(
                 context,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED) {
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             startLocationUpdate()
         }
     }
@@ -55,36 +63,35 @@ class CurrentWeatherViewModel @Inject constructor(
     }
 
     fun onEvent(event: CurrentWeatherEvent) {
-        when(event) {
+        when (event) {
             CurrentWeatherEvent.SwipeRefresh -> {
                 getCurrentWeather()
             }
         }
-
     }
 
     fun getCurrentWeather() {
         val location = getCurrentLocation()
-        getWeatherUseCase(location?.latitude ?: 14.6091, location?.longitude ?: 121.0223).onEach { result ->
-            when(result) {
-                is Resource.Success -> {
-                    _state.value = CurrentWeatherState(weather = result.data)
-                }
-                is Resource.Error -> {
-                    _state.value = CurrentWeatherState(
-                        error = result.message ?: "An unexpected error occurred"
-                    )
-                }
-                is Resource.Loading -> {
-                    _state.value = _state.value.copy(isLoading = true)
-                }
-
+        //TODO("check loading implementation")
+        _state.value = _state.value.copy(isLoading = true)
+        getWeatherUseCase(location?.latitude, location?.longitude).onEach { result ->
+            result.ifSuccess { data ->
+                _state.value = CurrentWeatherState(weather = data)
+            }.ifError { error ->
+                _state.value = _state.value.copy(isLoading = false)
+                val errorMessage = error.asUiText()
+                _eventFlow.emit(UiEvent.Error(errorMessage))
             }
+
         }.launchIn(viewModelScope)
     }
 
     override fun onCleared() {
         super.onCleared()
         locationManager.removeUpdates(locationCallback)
+    }
+
+    sealed class UiEvent {
+        data class Error(val error: UiText) : UiEvent()
     }
 }

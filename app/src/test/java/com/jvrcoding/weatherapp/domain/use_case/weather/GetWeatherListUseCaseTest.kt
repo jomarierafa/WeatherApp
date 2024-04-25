@@ -6,7 +6,8 @@ import com.jvrcoding.weatherapp.data.local.WeatherEntity
 import com.jvrcoding.weatherapp.data.repository.FakeDataStoreRepository
 import com.jvrcoding.weatherapp.data.repository.FakeWeatherRepository
 import com.google.common.truth.Truth
-import kotlinx.coroutines.flow.first
+import com.jvrcoding.weatherapp.domain.util.ifSuccess
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -53,18 +54,24 @@ class GetWeatherListUseCaseTest {
 
     @Test
     fun `get Weather list by time created in descending order`() = runBlocking {
-        val list = getWeatherList().first()
-
-        for(i in 0 ..list.size - 2) {
-            Truth.assertThat(list[i].timeCreated).isGreaterThan(list[i+1].timeCreated)
+        getWeatherList().collectLatest { list ->
+            println(list)
+            list.ifSuccess { data ->
+                for(i in 0 ..data.size - 2) {
+                    Truth.assertThat(data[i].timeCreated).isGreaterThan(data[i+1].timeCreated)
+                }
+            }
         }
     }
 
     @Test
     fun `get weather list, check if all belong to user`() = runBlocking {
-        val list = getWeatherList().first()
-        val username = "username"
-        Truth.assertThat(list.all { it.username == username}).isTrue()
+        getWeatherList().collectLatest { list ->
+            val username = "username"
+            list.ifSuccess { data ->
+                Truth.assertThat(data.all { it.username == username}).isTrue()
+            }
+        }
     }
 
 }

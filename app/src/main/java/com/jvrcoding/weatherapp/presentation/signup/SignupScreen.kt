@@ -51,7 +51,7 @@ fun SignupScreen(
                 }
 
                 is SignupViewModel.UiEvent.ShowToast -> {
-                    context.toast(event.message)
+                    context.toast(event.message.asString(context))
                 }
             }
         }

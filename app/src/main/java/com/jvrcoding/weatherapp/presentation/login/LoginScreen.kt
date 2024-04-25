@@ -34,6 +34,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.jvrcoding.weatherapp.R
 import com.jvrcoding.weatherapp.common.*
+import com.jvrcoding.weatherapp.presentation.util.LocationFinePermissionTextProvider
+import com.jvrcoding.weatherapp.presentation.util.PermissionDialog
+import com.jvrcoding.weatherapp.presentation.util.Screen
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
@@ -107,7 +110,7 @@ fun LoginScreen(
                 is LoginViewModel.UiEvent.ShowToast -> {
                     Toast.makeText(
                         context,
-                        event.message,
+                        event.message.asString(context),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

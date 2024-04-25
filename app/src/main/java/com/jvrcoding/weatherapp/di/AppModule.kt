@@ -8,8 +8,8 @@ import com.jvrcoding.weatherapp.data.local.WeatherDatabase
 import com.jvrcoding.weatherapp.data.remote.WeatherApi
 import com.jvrcoding.weatherapp.data.repository.DataStoreRepoImpl
 import com.jvrcoding.weatherapp.data.repository.RemoteConfigRepoImpl
-import com.jvrcoding.weatherapp.data.repository.UserRepositoryImpl
-import com.jvrcoding.weatherapp.data.repository.WeatherRepositoryImpl
+import com.jvrcoding.weatherapp.data.repository.UserRepoImpl
+import com.jvrcoding.weatherapp.data.repository.WeatherRepoImpl
 import com.jvrcoding.weatherapp.domain.repository.DataStoreRepo
 import com.jvrcoding.weatherapp.domain.repository.RemoteConfigRepo
 import com.jvrcoding.weatherapp.domain.repository.UserRepository
@@ -17,6 +17,7 @@ import com.jvrcoding.weatherapp.domain.repository.WeatherRepository
 import com.jvrcoding.weatherapp.domain.use_case.user.GetUser
 import com.jvrcoding.weatherapp.domain.use_case.user.InsertUser
 import com.jvrcoding.weatherapp.domain.use_case.user.UserUseCases
+import com.jvrcoding.weatherapp.domain.util.UserDataValidator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -72,7 +73,11 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideWeatherApi(retrofit: Retrofit) = retrofit.create(WeatherApi::class.java)
+    fun provideUserDataValidator(): UserDataValidator = UserDataValidator()
+
+    @Provides
+    @Singleton
+    fun provideWeatherApi(retrofit: Retrofit): WeatherApi = retrofit.create(WeatherApi::class.java)
 
     @Provides
     @Singleton
@@ -90,23 +95,24 @@ class AppModule {
     @Provides
     @Singleton
     fun provideUserRepository(db: WeatherDatabase): UserRepository {
-        return UserRepositoryImpl(db.userDao)
+        return UserRepoImpl(db.userDao)
     }
 
     @Provides
     @Singleton
     fun provideWeatherRepository(db: WeatherDatabase, api: WeatherApi): WeatherRepository {
-        return WeatherRepositoryImpl(db.weatherDao, api)
+        return WeatherRepoImpl(db.weatherDao, api)
     }
 
     @Provides
     @Singleton
     fun provideUserUseCases(repository: UserRepository,
                             dataStoreRepo: DataStoreRepo,
-                            remoteConfigRepo: RemoteConfigRepo): UserUseCases {
+                            remoteConfigRepo: RemoteConfigRepo,
+                            userDataValidator: UserDataValidator): UserUseCases {
         return UserUseCases(
-            insertUser = InsertUser(repository),
-            getUser = GetUser(repository, dataStoreRepo, remoteConfigRepo)
+            insertUser = InsertUser(repository, userDataValidator),
+            getUser = GetUser(repository, dataStoreRepo, remoteConfigRepo, userDataValidator)
         )
     }
 

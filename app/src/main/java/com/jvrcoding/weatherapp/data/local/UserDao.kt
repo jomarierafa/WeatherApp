@@ -8,13 +8,13 @@ import androidx.room.Query
 @Dao
 interface UserDao {
 
-    @Query("SELECT * FROM user WHERE username = :username AND password = :password")
-    suspend fun getUser(username: String, password: String): User?
+    @Query("SELECT * FROM userentity WHERE username = :username AND password = :password")
+    suspend fun getUser(username: String, password: String): UserEntity?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertUser(user: User): Long
+    suspend fun insertUser(user: UserEntity): Long
 
-    @Query("SELECT COUNT(*) FROM user")
+    @Query("SELECT COUNT(*) FROM userentity")
     suspend fun getUserCount(): Int
 
 }
