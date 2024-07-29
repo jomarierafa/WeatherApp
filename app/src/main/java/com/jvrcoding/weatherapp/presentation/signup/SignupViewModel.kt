@@ -48,6 +48,14 @@ class SignupViewModel @Inject constructor(
                 state = state.copy(confirmPassword = event.value)
             }
 
+            is SignupEvent.TogglePasswordVisibility -> {
+                state = state.copy(passwordVisible = event.isPasswordVisible)
+            }
+
+            is SignupEvent.ToggleConfirmPasswordVisibility -> {
+                state = state.copy(confirmPasswordVisible = event.isConfirmPasswordVisible)
+            }
+
             is SignupEvent.Signup -> {
                 addUser()
             }

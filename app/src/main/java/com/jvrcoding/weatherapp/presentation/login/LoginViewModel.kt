@@ -51,6 +51,10 @@ class LoginViewModel @Inject constructor(
             is LoginEvent.PasswordChanged -> {
                 state = state.copy(password = event.value)
             }
+
+            is LoginEvent.TogglePasswordVisibility -> {
+                state = state.copy(passwordVisible = event.isPasswordVisible)
+            }
         }
     }
 

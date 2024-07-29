@@ -12,5 +12,9 @@ sealed class SignupEvent {
 
     data class ConfirmPasswordChanged(val value: String): SignupEvent()
 
+    data class TogglePasswordVisibility(val isPasswordVisible: Boolean) : SignupEvent()
+
+    data class ToggleConfirmPasswordVisibility(val isConfirmPasswordVisible: Boolean) : SignupEvent()
+
     data object Signup: SignupEvent()
 }

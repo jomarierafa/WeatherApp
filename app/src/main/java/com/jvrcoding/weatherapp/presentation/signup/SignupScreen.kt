@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,9 +35,6 @@ fun SignupScreen(
     uiEvent: Flow<SignupViewModel.UiEvent>,
     onEvent: (SignupEvent) -> Unit
 ) {
-
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    var conFirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -116,15 +112,17 @@ fun SignupScreen(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Next
             ),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (state.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                val image = if (passwordVisible)
+                val image = if (state.passwordVisible)
                     Icons.Filled.Visibility
                 else Icons.Filled.VisibilityOff
 
-                val description = if (passwordVisible) "Hide password" else "Show password"
+                val description = if (state.passwordVisible) "Hide password" else "Show password"
 
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                IconButton(onClick = {
+                    onEvent(SignupEvent.TogglePasswordVisibility(!state.passwordVisible))
+                }) {
                     Icon(imageVector = image, description)
                 }
             },
@@ -140,15 +138,17 @@ fun SignupScreen(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
-            visualTransformation = if (conFirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (state.confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                val image = if (conFirmPasswordVisible)
+                val image = if (state.confirmPasswordVisible)
                     Icons.Filled.Visibility
                 else Icons.Filled.VisibilityOff
 
-                val description = if (conFirmPasswordVisible) "Hide password" else "Show password"
+                val description = if (state.confirmPasswordVisible) "Hide password" else "Show password"
 
-                IconButton(onClick = { conFirmPasswordVisible = !conFirmPasswordVisible }) {
+                IconButton(onClick = {
+                    onEvent(SignupEvent.ToggleConfirmPasswordVisibility(!state.confirmPasswordVisible))
+                }) {
                     Icon(imageVector = image, description)
                 }
             },
