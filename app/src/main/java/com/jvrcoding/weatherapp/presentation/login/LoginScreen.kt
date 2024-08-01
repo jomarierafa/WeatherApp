@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,8 +47,6 @@ fun LoginScreen(
     uiEvent: Flow<LoginViewModel.UiEvent>,
     onEvent: (LoginEvent) -> Unit
 ) {
-
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
     val context = LocalContext.current
 
@@ -146,8 +143,11 @@ fun LoginScreen(
 
         OutlinedTextField(
             value = state.username,
-            onValueChange = { onEvent(LoginEvent.UsernameChanged(it)) },
-            label = { Text(text = stringResource(id = R.string.username)) },
+            onValueChange = {
+                onEvent(LoginEvent.UsernameChanged(it)) },
+            label = {
+                Text(text = stringResource(id = R.string.username))
+                    },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
@@ -163,15 +163,17 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (state.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                val image = if (passwordVisible)
+                val image = if (state.passwordVisible)
                     Icons.Filled.Visibility
                 else Icons.Filled.VisibilityOff
 
-                val description = if (passwordVisible) "Hide password" else "Show password"
+                val description = if (state.passwordVisible) "Hide password" else "Show password"
 
-                IconButton(onClick = {passwordVisible = !passwordVisible}){
+                IconButton(onClick = {
+                    onEvent(LoginEvent.TogglePasswordVisibility(!state.passwordVisible))
+                }){
                     Icon(imageVector  = image, description)
                 }
             },

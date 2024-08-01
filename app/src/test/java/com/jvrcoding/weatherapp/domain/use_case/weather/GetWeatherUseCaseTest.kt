@@ -1,6 +1,5 @@
 package com.jvrcoding.weatherapp.domain.use_case.weather
 
-import com.jvrcoding.weatherapp.common.Resource
 import com.jvrcoding.weatherapp.data.remote.*
 import com.jvrcoding.weatherapp.data.repository.FakeDataStoreRepository
 import com.jvrcoding.weatherapp.data.repository.WeatherRepoImpl
@@ -44,7 +43,7 @@ class GetWeatherUseCaseTest {
             sys = SysDto("PH", 30L, 40L)
         )
 
-        val expected = Resource.Success(weatherDto.toWeather())
+        val expected = Result.Success(weatherDto.toWeather())
         coEvery { mockRepository.getCurrentWeather(lat, lon, username) } returns Result.Success(weatherDto.toWeather())
 
         useCase(lat, lon).collectLatest {

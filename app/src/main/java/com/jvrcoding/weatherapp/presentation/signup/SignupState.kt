@@ -7,7 +7,9 @@ data class SignupState(
     val lastname: String = "",
     val username: String = "",
     val password: String = "",
-    val confirmPassword: String = ""
+    val confirmPassword: String = "",
+    val passwordVisible: Boolean = false,
+    val confirmPasswordVisible: Boolean = false
 )
 
 fun SignupState.toUser(): User {

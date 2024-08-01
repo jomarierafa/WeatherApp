@@ -8,8 +8,10 @@ sealed class LoginEvent {
 
     data class OnPermissionResult(val permission: String, val isGranted: Boolean): LoginEvent()
 
-    object DismissDialog: LoginEvent()
+    data class TogglePasswordVisibility(val isPasswordVisible: Boolean) : LoginEvent()
 
-    object Login: LoginEvent()
+    data object DismissDialog: LoginEvent()
+
+    data object Login: LoginEvent()
 
 }

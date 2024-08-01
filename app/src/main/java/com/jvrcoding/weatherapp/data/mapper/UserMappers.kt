@@ -7,7 +7,7 @@ fun UserEntity.toUser() : User {
     return User(
         firstname = firstname,
         lastname = lastname,
-        username = lastname,
+        username = username,
         password = password,
         confirmPassword = ""
     )
@@ -17,7 +17,7 @@ fun User.toUserEntity() : UserEntity {
     return UserEntity(
         firstname = firstname,
         lastname = lastname,
-        username = lastname,
+        username = username,
         password = password
     )
 }
