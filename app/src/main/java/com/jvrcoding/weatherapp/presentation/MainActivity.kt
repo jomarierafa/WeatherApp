@@ -4,11 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -19,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import com.jvrcoding.to_do_app.ui.theme.WeatherAppTheme
 import com.jvrcoding.weatherapp.R
 import com.jvrcoding.weatherapp.presentation.util.Screen
 import com.jvrcoding.weatherapp.common.buildAlertDialog
@@ -33,7 +33,7 @@ import com.jvrcoding.weatherapp.presentation.signup.SignupScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
 
         setContent {
-            MaterialTheme {
+            WeatherAppTheme(dynamicColor = false) {
                 val navController = rememberNavController()
 
                 NavHost(
