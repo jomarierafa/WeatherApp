@@ -9,11 +9,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +36,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -132,9 +141,9 @@ fun LoginScreen(
     ) {
         Text(
             text = stringResource(id = R.string.login),
-            style = MaterialTheme.typography.h4,
+            style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colors.primaryVariant,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = dimensionResource(id = R.dimen.space_lg))
@@ -193,21 +202,22 @@ fun LoginScreen(
                     multiplePermissionResultLauncher.launch(permissionsToRequest.toTypedArray())
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(4.dp)
         ) {
             Text(text = stringResource(id = R.string.login), modifier = Modifier.padding(dimensionResource(id = R.dimen.space_sm)))
         }
 
-        Button(
+        OutlinedButton(
             onClick = {
                 navController.navigate(Screen.SignUpScreen.route)
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = dimensionResource(id = R.dimen.space_md)),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colors.primaryVariant),
-            elevation = ButtonDefaults.elevation(defaultElevation = Dp(0F), pressedElevation = Dp(0F)),
-            border = BorderStroke(width = Dp(1F), color = MaterialTheme.colors.primaryVariant),
+            elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = Dp(0F), pressedElevation = Dp(0F)),
+            border = BorderStroke(width = Dp(1F), color = MaterialTheme.colorScheme.primary),
+            shape = RoundedCornerShape(4.dp)
         ) {
             Text(text = stringResource(id = R.string.sign_up),
                 modifier = Modifier.padding(dimensionResource(id = R.dimen.space_sm))
@@ -225,7 +235,7 @@ class UsernameParameterProvider: PreviewParameterProvider<String> {
 
 
 @Preview(showSystemUi = true)
-@PreviewScreenSizes
+//@PreviewScreenSizes
 @Composable
 fun ScreenPreview(
     @PreviewParameter(UsernameParameterProvider::class) username: String

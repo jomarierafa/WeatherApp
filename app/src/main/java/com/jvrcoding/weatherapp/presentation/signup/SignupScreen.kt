@@ -4,11 +4,19 @@ package com.jvrcoding.weatherapp.presentation.signup
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +30,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jvrcoding.weatherapp.R
 import com.jvrcoding.weatherapp.common.toast
@@ -62,9 +71,9 @@ fun SignupScreen(
     ) {
         Text(
             text = stringResource(id = R.string.register),
-            style = MaterialTheme.typography.h4,
+            style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colors.primaryVariant,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = dimensionResource(id = R.dimen.space_lg))
@@ -140,7 +149,7 @@ fun SignupScreen(
             ),
             visualTransformation = if (state.confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                val image = if (state.confirmPasswordVisible)
+                val image = if (state.passwordVisible)
                     Icons.Filled.Visibility
                 else Icons.Filled.VisibilityOff
 
@@ -162,7 +171,8 @@ fun SignupScreen(
 
         Button(
             onClick = { onEvent(SignupEvent.Signup) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(4.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.sign_up),
@@ -170,19 +180,16 @@ fun SignupScreen(
             )
         }
 
-        Button(
+        OutlinedButton(
             onClick = {
                 navController.navigateUp()
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = dimensionResource(id = R.dimen.space_md)),
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colors.primaryVariant),
-            elevation = ButtonDefaults.elevation(
-                defaultElevation = Dp(0F),
-                pressedElevation = Dp(0F)
-            ),
-            border = BorderStroke(width = Dp(1F), color = MaterialTheme.colors.primaryVariant),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
+            border = BorderStroke(width = Dp(1F), color = MaterialTheme.colorScheme.primary),
+            shape = RoundedCornerShape(4.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.cancel),

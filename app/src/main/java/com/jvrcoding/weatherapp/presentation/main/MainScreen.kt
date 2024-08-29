@@ -1,9 +1,17 @@
 package com.jvrcoding.weatherapp.presentation.main
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,6 +25,7 @@ import com.jvrcoding.weatherapp.presentation.main.current_weather.CurrentWeather
 import com.jvrcoding.weatherapp.presentation.main.current_weather.CurrentWeatherViewModel
 import com.jvrcoding.weatherapp.presentation.main.weather_list.WeatherListViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     navController: NavController,
@@ -48,8 +57,7 @@ fun MainScreen(
         Column(Modifier.padding(innerPadding)) {
             TabRow(
                 selectedTabIndex = selectedIndex.intValue,
-                backgroundColor = Color.White,
-                contentColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 tabs.forEachIndexed { index, title ->
@@ -57,7 +65,7 @@ fun MainScreen(
                         text = {
                             Text(
                                 title,
-                                color = if(selectedIndex.intValue == index) MaterialTheme.colors.primary else Color.Black
+                                color = if(selectedIndex.intValue == index) MaterialTheme.colorScheme.primary else Color.Black
                             )
                         },
                         selected = selectedIndex.intValue == index,

@@ -5,9 +5,10 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -17,7 +18,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
@@ -64,7 +64,7 @@ fun CurrentWeatherScreen(
             SwipeRefreshIndicator(
                 state = _state,
                 refreshTriggerDistance = refreshTrigger,
-                contentColor = MaterialTheme.colors.primary
+                contentColor = MaterialTheme.colorScheme.primary
             )
         }
     ) {
@@ -82,7 +82,7 @@ fun CurrentWeatherScreen(
                     }
                     .padding(dimensionResource(R.dimen.space_lg))
                     .fillMaxWidth(),
-                elevation = Dp(4f)
+                elevation = CardDefaults.cardElevation(4.dp)
             ) {
                 Box(
                     modifier = Modifier
@@ -94,7 +94,7 @@ fun CurrentWeatherScreen(
                     ) {
                         Text(
                             text = state.weather?.let { "Today ${it.timeCreated.epochToString("h:mm a")}" }  ?: "",
-                            style = MaterialTheme.typography.body1,
+                            style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.End,
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -109,19 +109,19 @@ fun CurrentWeatherScreen(
                         Text(
                             text = state.weather?.let { "${it.temperature.kelvinToCelsius()} ${context.getString(R.string.celsius)}" } ?: "",
                             fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.h6,
+                            style = MaterialTheme.typography.headlineMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
                         Text(
                             text = state.weather?.description ?: "",
-                            style = MaterialTheme.typography.body1,
+                            style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
                         Text(
                             text = state.weather?.let { "${it.city}, ${it.country.getCountryName()}" } ?: "",
-                            style = MaterialTheme.typography.body1,
+                            style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -131,13 +131,13 @@ fun CurrentWeatherScreen(
                         ) {
                             Text(
                                 text = state.weather?.let { "Sunrise ${it.sunriseTime.convertUtcToLocaleTime()}" } ?: "",
-                                style = MaterialTheme.typography.body1,
+                                style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.weight(1f)
                             )
                             Text(
                                 text = state.weather?.let { "Sunset ${it.sunsetTime.convertUtcToLocaleTime()}" } ?: "",
-                                style = MaterialTheme.typography.body1,
+                                style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.weight(1f)
                             )
