@@ -11,6 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -50,7 +51,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-
+        installSplashScreen()
         setContent {
             WeatherAppTheme(dynamicColor = false) {
                 val navController = rememberNavController()
