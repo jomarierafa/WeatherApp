@@ -7,8 +7,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -24,14 +27,12 @@ import coil.compose.AsyncImage
 import com.jvrcoding.weatherapp.R
 import com.jvrcoding.weatherapp.common.*
 import com.jvrcoding.weatherapp.domain.model.Weather
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.emptyFlow
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrentWeatherScreen(
     state: CurrentWeatherState,
@@ -54,20 +55,11 @@ fun CurrentWeatherScreen(
         }
     }
 
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(state.isLoading),
-        onRefresh = {
-            onEvent(CurrentWeatherEvent.SwipeRefresh)
-        },
+    PullToRefreshBox(
         modifier = Modifier.fillMaxSize(),
-        indicator = { _state, refreshTrigger ->
-            SwipeRefreshIndicator(
-                state = _state,
-                refreshTriggerDistance = refreshTrigger,
-                contentColor = MaterialTheme.colorScheme.primary
-            )
-        }
-    ) {
+        state = rememberPullToRefreshState(),
+        isRefreshing = state.isLoading,
+        onRefresh = { onEvent(CurrentWeatherEvent.SwipeRefresh) }) {
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -93,7 +85,8 @@ fun CurrentWeatherScreen(
                             .fillMaxWidth()
                     ) {
                         Text(
-                            text = state.weather?.let { "Today ${it.timeCreated.epochToString("h:mm a")}" }  ?: "",
+                            text = state.weather?.let { "Today ${it.timeCreated.epochToString("h:mm a")}" }
+                                ?: "",
                             style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.End,
                             modifier = Modifier.fillMaxWidth()
@@ -107,7 +100,13 @@ fun CurrentWeatherScreen(
                                 .align(Alignment.CenterHorizontally)
                         )
                         Text(
-                            text = state.weather?.let { "${it.temperature.kelvinToCelsius()} ${context.getString(R.string.celsius)}" } ?: "",
+                            text = state.weather?.let {
+                                "${it.temperature.kelvinToCelsius()} ${
+                                    context.getString(
+                                        R.string.celsius
+                                    )
+                                }"
+                            } ?: "",
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.headlineMedium,
                             textAlign = TextAlign.Center,
@@ -120,7 +119,8 @@ fun CurrentWeatherScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
                         Text(
-                            text = state.weather?.let { "${it.city}, ${it.country.getCountryName()}" } ?: "",
+                            text = state.weather?.let { "${it.city}, ${it.country.getCountryName()}" }
+                                ?: "",
                             style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
@@ -130,13 +130,15 @@ fun CurrentWeatherScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = state.weather?.let { "Sunrise ${it.sunriseTime.convertUtcToLocaleTime()}" } ?: "",
+                                text = state.weather?.let { "Sunrise ${it.sunriseTime.convertUtcToLocaleTime()}" }
+                                    ?: "",
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.weight(1f)
                             )
                             Text(
-                                text = state.weather?.let { "Sunset ${it.sunsetTime.convertUtcToLocaleTime()}" } ?: "",
+                                text = state.weather?.let { "Sunset ${it.sunsetTime.convertUtcToLocaleTime()}" }
+                                    ?: "",
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.weight(1f)
@@ -146,6 +148,7 @@ fun CurrentWeatherScreen(
                 }
             }
         }
+
     }
 }
 
