@@ -2,7 +2,7 @@
 <resources>
     <style name="Theme.App.MySplash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#000000</item>
-<!--        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_logo_dark</item>-->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_splash_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.WeatherApp</item>
     </style>
 </resources>

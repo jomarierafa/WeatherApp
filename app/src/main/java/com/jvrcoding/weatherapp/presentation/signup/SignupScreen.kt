@@ -64,7 +64,7 @@ fun SignupScreen(
 
     Column(
         modifier = Modifier
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .padding(dimensionResource(id = R.dimen.space_lg)),
         horizontalAlignment = Alignment.CenterHorizontally,
