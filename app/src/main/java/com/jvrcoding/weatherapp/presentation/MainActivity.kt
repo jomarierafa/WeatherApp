@@ -13,15 +13,14 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import androidx.navigation.toRoute
 import com.jvrcoding.to_do_app.ui.theme.WeatherAppTheme
 import com.jvrcoding.weatherapp.R
-import com.jvrcoding.weatherapp.presentation.util.Screen
+import com.jvrcoding.weatherapp.common.Constant
 import com.jvrcoding.weatherapp.common.buildAlertDialog
 import com.jvrcoding.weatherapp.common.isAutomaticTimeEnabled
 import com.jvrcoding.weatherapp.presentation.main.MainScreen
@@ -30,6 +29,10 @@ import com.jvrcoding.weatherapp.presentation.signup.SignupViewModel
 import com.jvrcoding.weatherapp.presentation.login.LoginScreen
 import com.jvrcoding.weatherapp.presentation.main.current_weather.CurrentWeatherViewModel
 import com.jvrcoding.weatherapp.presentation.main.weather_list.WeatherListViewModel
+import com.jvrcoding.weatherapp.presentation.screen.DeepLink
+import com.jvrcoding.weatherapp.presentation.screen.Login
+import com.jvrcoding.weatherapp.presentation.screen.Main
+import com.jvrcoding.weatherapp.presentation.screen.Signup
 import com.jvrcoding.weatherapp.presentation.signup.SignupScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +41,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         addDynamicShortcut()
 
         if (!isAutomaticTimeEnabled(this)) {
@@ -58,9 +60,9 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = Screen.LoginScreen.route
+                    startDestination = Login
                 ) {
-                    composable(route = Screen.LoginScreen.route) {
+                    composable<Login> {
                         val viewModel = hiltViewModel<LoginViewModel>()
                         LoginScreen(
                             navController = navController,
@@ -70,7 +72,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable(route = Screen.SignUpScreen.route) {
+                    composable<Signup> {
                         val viewModel = hiltViewModel<SignupViewModel>()
                         SignupScreen(
                             navController = navController,
@@ -80,7 +82,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable(route = Screen.MainScreen.route) {
+                    composable<Main> {
                         val currentWeatherViewModel = hiltViewModel<CurrentWeatherViewModel>()
                         val weatherListViewModel = hiltViewModel<WeatherListViewModel>()
                         MainScreen(
@@ -90,30 +92,22 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    composable(
-                        route = "deeplink",
+                    composable<DeepLink>(
                         deepLinks = listOf(
-                            navDeepLink {
-                                uriPattern = "weather://${getString(R.string.app_scheme_host)}/{id}"
-                                action = Intent.ACTION_VIEW
-                            },
-                            navDeepLink {
-                                uriPattern = "https://${getString(R.string.app_scheme_host)}/{id}"
-                                action = Intent.ACTION_VIEW
-                            }
+                            navDeepLink<DeepLink>(
+                                basePath = "weather://${getString(R.string.app_scheme_host)}",
+                            ),
+                            navDeepLink<DeepLink>(
+                                basePath = "https://${getString(R.string.app_scheme_host)}",
+                            )
                         ),
-                        arguments = listOf(
-                            navArgument("id") {
-                                type = NavType.IntType
-                                defaultValue = -1
-                            }
-                        )
                     ) { navBackStackEntry ->
-                        when (navBackStackEntry.arguments?.getInt("id")) {
-                            Screen.SignUpScreen.deeplinkId -> navController.navigate(Screen.SignUpScreen.route) {
-                                popUpTo(Screen.LoginScreen.route)
+                        val args = navBackStackEntry.toRoute<DeepLink>()
+                        when (args.id) {
+                            Constant.SIGNUP_SCREEN_ID -> navController.navigate(Signup) {
+                                popUpTo(Login)
                             }
-                            else -> navController.navigate(Screen.LoginScreen.route) {
+                            else -> navController.navigate(Login) {
                                 popUpTo(navController.graph.id) {
                                     inclusive = true
                                 }
@@ -156,7 +150,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-//        handleIntent(intent)
     }
 
     private fun addDynamicShortcut() {
@@ -172,8 +165,9 @@ class MainActivity : ComponentActivity() {
                 Intent(applicationContext, MainActivity::class.java).apply {
                     action = Intent.ACTION_VIEW
                     data =
-                        Uri.parse("weather://${getString(R.string.app_scheme_host)}/${Screen.SignUpScreen.deeplinkId}")
+                        Uri.parse("weather://${getString(R.string.app_scheme_host)}/${Constant.SIGNUP_SCREEN_ID}")
                     putExtra("shortcut_id", "dynamic")
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
             )
             .build()

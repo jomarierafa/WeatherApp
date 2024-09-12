@@ -11,7 +11,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.jvrcoding.weatherapp.presentation.util.Screen
+import com.jvrcoding.weatherapp.common.Constant
 import com.jvrcoding.weatherapp.presentation.MainActivity
 import kotlin.math.abs
 
@@ -53,7 +53,7 @@ class PushNotificationService : FirebaseMessagingService() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             action = Intent.ACTION_VIEW
             data =
-                Uri.parse("weather://${getString(R.string.app_scheme_host)}/${Screen.SignUpScreen.deeplinkId}")
+                Uri.parse("weather://${getString(R.string.app_scheme_host)}/${Constant.SIGNUP_SCREEN_ID}")
         }
 
         val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

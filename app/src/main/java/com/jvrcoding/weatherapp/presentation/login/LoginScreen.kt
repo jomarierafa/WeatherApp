@@ -40,9 +40,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.jvrcoding.weatherapp.R
 import com.jvrcoding.weatherapp.common.*
+import com.jvrcoding.weatherapp.presentation.screen.Main
+import com.jvrcoding.weatherapp.presentation.screen.Signup
 import com.jvrcoding.weatherapp.presentation.util.LocationFinePermissionTextProvider
 import com.jvrcoding.weatherapp.presentation.util.PermissionDialog
-import com.jvrcoding.weatherapp.presentation.util.Screen
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
@@ -119,7 +120,7 @@ fun LoginScreen(
                     ).show()
                 }
                 is LoginViewModel.UiEvent.SuccessfullyLogin -> {
-                    navController.navigate(Screen.MainScreen.route) {
+                    navController.navigate(Main) {
                         popUpTo(navController.graph.id) {
                             inclusive = true
                         }
@@ -208,7 +209,7 @@ fun LoginScreen(
 
         OutlinedButton(
             onClick = {
-                navController.navigate(Screen.SignUpScreen.route)
+                navController.navigate(Signup)
             },
             modifier = Modifier
                 .fillMaxWidth()
