@@ -20,10 +20,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.jvrcoding.weatherapp.presentation.main.weather_list.WeatherListScreen
 import com.jvrcoding.weatherapp.R
-import com.jvrcoding.weatherapp.presentation.util.Screen
 import com.jvrcoding.weatherapp.presentation.main.current_weather.CurrentWeatherScreen
 import com.jvrcoding.weatherapp.presentation.main.current_weather.CurrentWeatherViewModel
 import com.jvrcoding.weatherapp.presentation.main.weather_list.WeatherListViewModel
+import com.jvrcoding.weatherapp.presentation.screen.Login
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +41,7 @@ fun MainScreen(
                 title = { Text(stringResource(R.string.welcome)) },
                 actions = {
                     IconButton(onClick = {
-                        navController.navigate(Screen.LoginScreen.route) {
+                        navController.navigate(Login) {
                             popUpTo(navController.graph.id) {
                                 inclusive = true
                             }

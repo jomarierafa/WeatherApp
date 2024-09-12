@@ -13,4 +13,10 @@ object Constant {
     const val REMOTE_CONFIG_TAG = "REMOTE CONFIG"
 
 
+    //deeplink ids
+    const val LOGIN_SCREEN_ID = 0
+    const val SIGNUP_SCREEN_ID = 1
+    const val MAIN_SCREEN_ID = 2
+
+
 }
