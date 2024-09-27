@@ -17,6 +17,7 @@ import com.jvrcoding.weatherapp.presentation.util.UiText
 import com.jvrcoding.weatherapp.presentation.util.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
@@ -31,30 +32,31 @@ class CurrentWeatherViewModel @Inject constructor(
     }
 
     private val _state = MutableStateFlow(CurrentWeatherState())
-    val state = _state.asStateFlow()
+    val state = _state
+        .onStart { startLocationUpdate(context) }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            CurrentWeatherState()
+        )
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     private val locationCallback = LocationListener { }
 
-    //TODO("check alternative way to call this part")
-    init {
+    @SuppressLint("MissingPermission")
+    fun startLocationUpdate(context: Context) {
         if (ContextCompat.checkSelfPermission(
                 context,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            startLocationUpdate()
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, 5000, 10f, locationCallback
+            )
+            getCurrentWeather()
         }
-    }
-
-    @SuppressLint("MissingPermission")
-    fun startLocationUpdate() {
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER, 5000, 10f, locationCallback
-        )
-        getCurrentWeather()
     }
 
     @SuppressLint("MissingPermission")
@@ -78,6 +80,10 @@ class CurrentWeatherViewModel @Inject constructor(
             result.ifSuccess { data ->
                 _state.value = CurrentWeatherState(weather = data)
             }.ifError { error ->
+                // Adding a delay to ensure the state change to false is registered by observers
+                // This is necessary because without the delay, the quick succession of updates
+                // might not be detected by StateFlow's subscribers.
+                delay(100)
                 _state.value = _state.value.copy(isLoading = false)
                 val errorMessage = error.asUiText()
                 _eventFlow.emit(UiEvent.Error(errorMessage))

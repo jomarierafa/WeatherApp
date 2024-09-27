@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.app.TaskStackBuilder
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.jvrcoding.weatherapp.common.Constant
@@ -56,20 +57,9 @@ class PushNotificationService : FirebaseMessagingService() {
                 Uri.parse("weather://${getString(R.string.app_scheme_host)}/${Constant.SIGNUP_SCREEN_ID}")
         }
 
-        val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.getActivity(
-                this,
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-        } else {
-            PendingIntent.getActivity(
-                this,
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
+        val pendingIntent = TaskStackBuilder.create(this).run {
+            addNextIntent(intent)
+            getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE)
         }
 
         val builder = NotificationCompat.Builder(this, getString(R.string.channel_id))
@@ -79,6 +69,7 @@ class PushNotificationService : FirebaseMessagingService() {
             .setStyle(NotificationCompat.BigTextStyle().bigText(body))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
             .setAllowSystemGeneratedContextualActions(false)
             .build()
 
