@@ -54,7 +54,7 @@ class PushNotificationService : FirebaseMessagingService() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             action = Intent.ACTION_VIEW
             data =
-                Uri.parse("weather://${getString(R.string.app_scheme_host)}/${Constant.SIGNUP_SCREEN_ID}")
+                Uri.parse("${getString(R.string.app_scheme)}://${getString(R.string.app_scheme_host)}/${Constant.SIGNUP_SCREEN_ID}")
         }
 
         val pendingIntent = TaskStackBuilder.create(this).run {

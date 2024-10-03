@@ -2,6 +2,7 @@
     <string name="app_name">Weather</string>
     <string name="title_activity_login">LoginActivity</string>
 
+    <string name="app_scheme">weather</string>
     <string name="app_scheme_host">jvrcoding.com</string>
 
     <string name="channel_id">default</string>

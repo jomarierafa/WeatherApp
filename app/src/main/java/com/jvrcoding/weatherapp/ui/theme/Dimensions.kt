@@ -1,4 +1,4 @@
-package com.jvrcoding.to_do_app.ui.theme
+package com.jvrcoding.weatherapp.ui.theme
 
 import androidx.compose.ui.unit.dp
 

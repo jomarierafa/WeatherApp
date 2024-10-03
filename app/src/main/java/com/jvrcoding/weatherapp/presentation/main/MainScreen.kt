@@ -12,9 +12,11 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -36,8 +38,14 @@ fun MainScreen(
     val selectedIndex = remember { mutableIntStateOf(0) }
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+                ),
                 title = { Text(stringResource(R.string.welcome)) },
                 actions = {
                     IconButton(onClick = {
@@ -59,6 +67,7 @@ fun MainScreen(
                 selectedTabIndex = selectedIndex.intValue,
                 contentColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.fillMaxWidth()
+                    .windowInsetsPadding(WindowInsets(0, 0 ,0 ,0))
             ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(

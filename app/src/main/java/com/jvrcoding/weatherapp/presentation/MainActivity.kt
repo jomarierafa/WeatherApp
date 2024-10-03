@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -18,7 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
-import com.jvrcoding.to_do_app.ui.theme.WeatherAppTheme
+import com.jvrcoding.weatherapp.ui.theme.WeatherAppTheme
 import com.jvrcoding.weatherapp.R
 import com.jvrcoding.weatherapp.common.Constant
 import com.jvrcoding.weatherapp.common.buildAlertDialog
@@ -43,6 +44,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
+        enableEdgeToEdge()
         addDynamicShortcut()
 
         if (!isAutomaticTimeEnabled(this)) {
@@ -55,7 +58,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        installSplashScreen()
         setContent {
             WeatherAppTheme(dynamicColor = false) {
                 navController = rememberNavController()
@@ -77,7 +79,7 @@ class MainActivity : ComponentActivity() {
                     composable<Signup>(
                         deepLinks = listOf(
                             navDeepLink<DeepLink>(
-                                basePath = "weather://${getString(R.string.app_scheme_host)}",
+                                basePath = "${getString(R.string.app_scheme)}://${getString(R.string.app_scheme_host)}",
                             ),
                             navDeepLink<DeepLink>(
                                 basePath = "https://${getString(R.string.app_scheme_host)}",
@@ -135,7 +137,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         navController.handleDeepLink(intent)
         super.onNewIntent(intent)
     }
@@ -163,10 +165,6 @@ class MainActivity : ComponentActivity() {
         ShortcutManagerCompat.pushDynamicShortcut(applicationContext, shortcut)
     }
 
-    private fun handleIntent(intent: Intent?) {
-        intent?.let {}
-
-    }
 }
 
 
