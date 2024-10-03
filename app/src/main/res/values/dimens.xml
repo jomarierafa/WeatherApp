@@ -10,6 +10,7 @@
     <dimen name="text_size_xll">128sp</dimen>
 
     <!-- spaces -->
+    <dimen name="space_xxs">2dp</dimen>
     <dimen name="space_xs">4dp</dimen>
     <dimen name="space_sm">8dp</dimen>
     <dimen name="space_md">16dp</dimen>
