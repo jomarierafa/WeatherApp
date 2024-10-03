@@ -1,13 +1,13 @@
 package com.jvrcoding.weatherapp.presentation.main.weather_list
 
-import androidx.compose.foundation.background
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,9 +29,8 @@ fun WeatherItem(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp)
         ) {
-
             AsyncImage(
                 model = "${Constant.OPEN_WEATHER_IMAGE_URL}${weather.icon}@4x.png",
                 contentDescription = "weather image",
@@ -66,12 +65,33 @@ fun WeatherItem(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(1.dp).background(Color.LightGray))
+        HorizontalDivider(
+            thickness = 1.dp,
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun PreviewWeatherCard() {
-//    WeatherItem()
+    WeatherItem(
+        Weather(
+            id = 0,
+            weather = "sun",
+            description = "awit",
+            city = "Lian",
+            country = "Philippines",
+            icon = "",
+            sunsetTime = 0L,
+            sunriseTime = 0L,
+            username = "",
+            timeCreated = 0L,
+            temperature = 5.6
+        )
+
+    )
 }

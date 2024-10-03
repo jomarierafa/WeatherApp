@@ -1,13 +1,13 @@
 package com.jvrcoding.weatherapp.common
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import java.nio.charset.Charset
 import java.security.MessageDigest

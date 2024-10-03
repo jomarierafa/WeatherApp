@@ -14,9 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.jvrcoding.weatherapp.presentation.main.weather_list.WeatherListScreen
 import com.jvrcoding.weatherapp.R
@@ -65,7 +65,10 @@ fun MainScreen(
                         text = {
                             Text(
                                 title,
-                                color = if(selectedIndex.intValue == index) MaterialTheme.colorScheme.primary else Color.Black
+                                color = if(selectedIndex.intValue == index)
+                                    MaterialTheme.colorScheme.primary
+                                else
+                                    MaterialTheme.colorScheme.onBackground
                             )
                         },
                         selected = selectedIndex.intValue == index,
@@ -78,7 +81,7 @@ fun MainScreen(
 
             when (selectedIndex.intValue) {
                 0 -> {
-                    val state by currentWeatherViewModel.state.collectAsState()
+                    val state by currentWeatherViewModel.state.collectAsStateWithLifecycle()
                     CurrentWeatherScreen(
                         state = state,
                         onEvent = currentWeatherViewModel::onEvent,
