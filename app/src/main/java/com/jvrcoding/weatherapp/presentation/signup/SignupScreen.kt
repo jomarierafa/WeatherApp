@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -20,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -84,7 +84,7 @@ fun SignupScreen(
             value = state.firstname,
             onValueChange = { onEvent(SignupEvent.FirstnameChanged(it)) },
             label = { Text(text = stringResource(id = R.string.first_name)) },
-            keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
             ),
@@ -95,7 +95,7 @@ fun SignupScreen(
             value = state.lastname,
             onValueChange = { onEvent(SignupEvent.LastnameChanged(it)) },
             label = { Text(text = stringResource(id = R.string.last_name)) },
-            keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
             ),
@@ -106,7 +106,7 @@ fun SignupScreen(
             value = state.username,
             onValueChange = { onEvent(SignupEvent.UsernameChanged(it)) },
             label = { Text(text = stringResource(id = R.string.username)) },
-            keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
             ),
@@ -117,7 +117,7 @@ fun SignupScreen(
             value = state.password,
             onValueChange = { onEvent(SignupEvent.PasswordChanged(it)) },
             label = { Text(text = stringResource(id = R.string.password)) },
-            keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Next
             ),
@@ -143,9 +143,12 @@ fun SignupScreen(
             value = state.confirmPassword,
             onValueChange = { onEvent(SignupEvent.ConfirmPasswordChanged(it)) },
             label = { Text(text = stringResource(id = R.string.confirm_password)) },
-            keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { onEvent(SignupEvent.Signup) }
             ),
             visualTransformation = if (state.confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {

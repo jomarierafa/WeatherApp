@@ -130,13 +130,13 @@ fun WeatherCard(
                             )
                         }
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(
-                    painter = painterResource(id = android.R.drawable.ic_menu_rotate),
-                    contentDescription = "Refresh",
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.size(18.dp)
-                )
+//                Spacer(modifier = Modifier.width(8.dp))
+//                Icon(
+//                    painter = painterResource(id = android.R.drawable.ic_menu_rotate),
+//                    contentDescription = "Refresh",
+//                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+//                    modifier = Modifier.size(18.dp)
+//                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
