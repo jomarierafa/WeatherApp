@@ -10,6 +10,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -156,7 +157,7 @@ fun LoginScreen(
             label = {
                 Text(text = stringResource(id = R.string.username))
                     },
-            keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
             ),
@@ -167,9 +168,18 @@ fun LoginScreen(
             value = state.password,
             onValueChange = { onEvent(LoginEvent.PasswordChanged(it)) },
             label = { Text(text = stringResource(id = R.string.password)) },
-            keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    if(isAllPermissionGranted(context, permissionsToRequest)) {
+                        onEvent(LoginEvent.Login)
+                    } else {
+                        multiplePermissionResultLauncher.launch(permissionsToRequest.toTypedArray())
+                    }
+                }
             ),
             visualTransformation = if (state.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
